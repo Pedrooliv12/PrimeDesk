@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>PrimeDesk - Agendar</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+    <form>
+        <h2>Agendar Atendimento</h2>
+
+        <label>Estabelecimento</label>
+        <select required>
+            <option value="" selected disabled>Selecione um estabelecimento</option>
+            <option>Barbearia do João</option>
+            <option>Clínica Prime Saúde</option>
+            <option>Odonto Sorriso</option>
+        </select>
+
+        <label>Serviço</label>
+        <select required>
+            <option value="" selected disabled>Selecione um serviço</option>
+            <option>Corte de cabelo</option>
+            <option>Barba</option>
+            <option>Consulta (Clínica)</option>
+            <option>Psicólogo</option>
+        </select>
+
+        <label>Seu nome</label>
+        <input type="text" placeholder="Digite seu nome" required>
+
+        <label>Email</label>
+        <input type="email" placeholder="seuemail@gmail.com" required>
+
+        <label>Telefone</label>
+        <input type="tel" placeholder="(82) 9xxxx-xxxx" required>
+
+        <label>Dia</label>
+        <input type="date" required>
+
+        <label>Horário</label>
+        <input type="time" required>
+
+        <button type="submit">Solicitar agendamento</button>
+
+        <a href="../index.html">Sou administrador / Voltar para login</a>
+    </form>
+
+</body>
+</html>
