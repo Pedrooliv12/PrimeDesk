@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Completar Registro | PrimeDesk</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/registro-detalhes.css">
+</head>
+<body>
+
+    <div class="details-container">
+        <a href="landingPage.html" class="logo-text">
+            <span style="color: #006bff;">Prime</span>Desk
+        </a>
+
+        <div class="text-center mb-4">
+            <h2 class="fw-800 mb-2">Configure seu perfil</h2>
+            <p class="text-secondary small">Estamos quase lá.</p>
+        </div>
+
+        <!-- DEVE SER UM POST PARA SALVAR NO BACK END O CADASTRO -->
+         
+        <form action="onBoarding.html" method="get" id="formCadastro">
+            
+            <label class="form-label">Seu e-mail</label>
+            <input type="email" id="input-email" name="user_email" class="form-control">
+
+            <label class="form-label">Nome Completo</label>
+            <input type="text" name="user_nome" class="form-control" placeholder="Ex: João Silva" required autofocus>
+
+            <label class="form-label">Crie uma Senha</label>
+            <input type="password" name="user_password" class="form-control" placeholder="Mínimo 8 caracteres" required>
+
+            <button type="submit" class="btn-finish-reg">Continuar para configuração</button>
+        </form>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+
+            const emailURL = urlParams.get('email'); 
+            
+            if (emailURL) {
+                document.getElementById('input-email').value = emailURL;
+            } else {
+                document.getElementById('input-email').value = "email@exemplo.com";
+            }
+        };
+    </script>
+</body>
+</html>

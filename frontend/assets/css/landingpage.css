@@ -1,0 +1,151 @@
+:root {
+    --pallet-blue: #0099ff;
+    --pallet-green: #73d700;
+    --pallet-gradient: linear-gradient(135deg, #0099ff 0%, #73d700 100%);
+    
+    --background-dark: #23272a;
+    --popup-sidebar: #2f3136;
+    --text-muted: #b9bbbe;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--background-dark);
+    color: white;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin: 0;
+}
+
+.navbar { padding: 1.2rem 5%; }
+.nav-link { color: white !important; font-weight: 600; margin: 0 15px; font-size: 0.95rem; }
+.nav-link:hover { color: var(--pallet-green) !important; }
+
+.text-gradient {
+    background: var(--pallet-gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 0 8%;
+}
+
+.hero-title {
+    font-size: 4rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 24px;
+}
+
+.hero-desc {
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    max-width: 520px;
+    margin-bottom: 40px;
+    line-height: 1.6;
+}
+
+.btn-saas-primary {
+    background: var(--pallet-gradient);
+    color: white;
+    border: none;
+    padding: 18px 40px;
+    border-radius: 30px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(0, 153, 255, 0.2);
+}
+
+.btn-saas-primary:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 25px rgba(115, 215, 0, 0.3);
+    color: white;
+}
+
+.btn-saas-secondary {
+    background-color: #36393f;
+    color: white;
+    padding: 18px 40px;
+    border-radius: 30px;
+    font-weight: 700;
+    text-decoration: none;
+    margin-left: 15px;
+    transition: background 0.2s;
+}
+
+.btn-saas-secondary:hover {
+    background-color: #4f545c;
+    color: white;
+}
+
+/* CARD ILUSTRATIVO CRIADO POR IA (TALVEZ SEJA RETIRADA) */
+.dashboard-preview {
+    background: var(--popup-sidebar);
+    border-radius: 12px;
+    width: 100%;
+    height: 420px;
+    position: relative;
+    padding: 0;
+    border: 1px solid rgba(255,255,255,0.1);
+    overflow: hidden;
+    display: flex;
+}
+
+.side-bar-sim {
+    width: 60px;
+    background: #202225;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    gap: 15px;
+}
+
+.side-item { width: 35px; height: 35px; background: #36393f; border-radius: 50%; }
+.side-item.active { background: var(--pallet-blue); border-radius: 12px; }
+
+.main-view-sim {
+    flex: 1;
+    padding: 25px;
+    background: #36393f;
+}
+
+.card-sim {
+    background: #2f3136;
+    height: 60px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--pallet-green);
+    margin-right: 15px;
+}
+
+.floating-stats {
+    position: absolute;
+    top: 20px;
+    right: -10px;
+    background: white;
+    color: #23272a;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}

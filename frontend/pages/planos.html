@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planos | PrimeDesk</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/planos.css">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="../index.html">
+                <img src="../assets/img/logo.svg" alt="PrimeDesk" style="height: 35px;">
+            </a>
+            <div class="ms-auto d-flex align-items-center">
+                <a href="../pages/landingPage.html" class="nav-link me-3" style="color: white !important; font-weight: 600; text-decoration: none;">Voltar</a>
+                <a href="login.html" style="background: transparent; border: 1px solid #4f545c; color: white; padding: 8px 20px; border-radius: 20px; text-decoration: none; font-weight: 600;">Entrar</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container plans-container text-center">
+        <div class="mb-5">
+            <h1 style="font-size: 3rem; font-weight: 800; color: white;">Planos para todos os <span class="text-gradient">tamanhos</span>.</h1>
+            <p style="color: #b9bbbe; max-width: 600px; margin: 0 auto;">Escolha a melhor opção para sua empresa e comece a agendar hoje mesmo.</p>
+        </div>
+
+        <div class="row g-4 justify-content-center" style="max-width: 1100px; margin: 0 auto;">
+            <div class="col-lg-4">
+                <div class="plan-card">
+                    <h3 class="fw-bold">Mensal</h3>
+                    <div class="price">R$ 49,90<span>/mês</span></div>
+                    <p class="save-label"></p>
+                    <a href="checkout.html?plano=mensal" class="btn-saas-secondary" style="background: #4f545c; color: white; padding: 12px; border-radius: 25px; text-decoration: none; font-weight: 700;">Assinar agora</a>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="plan-card featured">
+                    <div class="badge-featured">MAIS POPULAR</div>
+                    <h3 class="fw-bold">Anual</h3>
+                    <div class="price">R$ 399,00<span>/ano</span></div>
+                    <p class="save-label">Economize R$ 199,80/ano</p>
+                    <a href="checkout.html?plano=anual" class="btn-saas-primary" style="background: linear-gradient(135deg, #0099ff 0%, #73d700 100%); color: white; padding: 12px; border-radius: 25px; text-decoration: none; font-weight: 700; border: none;">Assinar agora</a>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="plan-card">
+                    <h3 class="fw-bold">Trimestral</h3>
+                    <div class="price">R$ 129,00<span>/trimestre</span></div>
+                    <p class="save-label"></p>
+                    <a href="checkout.html?plano=trimestral" class="btn-saas-secondary" style="background: #4f545c; color: white; padding: 12px; border-radius: 25px; text-decoration: none; font-weight: 700;">Assinar agora</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

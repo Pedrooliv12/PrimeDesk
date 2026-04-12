@@ -1,0 +1,102 @@
+body {
+    background-color: #f9f9f9;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    display: flex;
+}
+
+/* BARRA LATERAL (Sidebar) */
+.sidebar {
+    width: 260px;
+    height: 100vh;
+    background: white;
+    border-right: 1px solid #e1e1e1;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+}
+
+.sidebar-header {
+    padding: 30px 24px;
+}
+
+.logo-text {
+    font-weight: 800;
+    font-size: 22px;
+    color: #1a1a1a;
+    text-decoration: none;
+}
+
+.nav-menu {
+    flex-grow: 1;
+    padding: 0 12px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: #4f545c;
+    font-weight: 600;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    transition: all 0.2s;
+}
+
+.nav-item i {
+    font-size: 20px;
+    margin-right: 12px;
+}
+
+.nav-item:hover, .nav-item.active {
+    background-color: #f0f7ff;
+    color: #006bff;
+}
+
+/* CONTEÚDO PRINCIPAL */
+.main-content {
+    margin-left: 260px;
+    width: 100%;
+    padding: 40px;
+}
+
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.btn-create {
+    background-color: #006bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: 700;
+}
+
+/* CARD DE AGENDA - NAO MEXER AINDA, POIS ELE DEPENDE DO BANCO DE DADOS E NODE
+.event-card {
+    background: white;
+    border: 1px solid #e1e1e1;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 6px solid #006bff;
+}
+
+.event-info h6 { font-weight: 800; margin-bottom: 5px; }
+.event-info p { margin-bottom: 0; color: #666; font-size: 14px; }
+
+.btn-copy {
+    background: white;
+    border: 1px solid #006bff;
+    color: #006bff;
+    border-radius: 20px;
+    padding: 5px 15px;
+    font-weight: 600;
+    font-size: 14px;
+} */
