@@ -13,6 +13,7 @@ body {
     padding: 20px;
 }
 
+/* MUDAR PARA LOGO ORIGINAL DEPOIS */
 .logo-text {
     font-weight: 800;
     font-size: 24px;
@@ -37,6 +38,11 @@ body {
     border: 1px solid #d1d1d1;
     margin-bottom: 20px;
     background-color: #fff;
+}
+
+.form-control:focus {
+    border-color: #006bff;
+    box-shadow: 0 0 0 4px rgba(0, 107, 255, 0.1);
 }
 
 .form-control-readonly {

@@ -14,6 +14,7 @@ body {
     text-align: center;
 }
 
+/* MUDAR PARA LOGO ORIGINAL DEPOIS */
 .logo-text {
     font-weight: 800;
     font-size: 26px;
@@ -86,5 +87,5 @@ body {
 }
 
 .btn-google:hover {
-    background-color: #f9f9f9;
+    background-color: #f1f1f1;
 }
