@@ -1,0 +1,91 @@
+body {
+    background-color: #ffffff;
+    color: #1a1a1a;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.register-container {
+    max-width: 440px;
+    margin: auto;
+    padding: 20px;
+    text-align: center;
+}
+
+/* MUDAR PARA LOGO ORIGINAL DEPOIS */
+.logo-text {
+    font-weight: 800;
+    font-size: 26px;
+    margin-bottom: 50px;
+    display: block;
+    text-decoration: none;
+    color: #1a1a1a;
+}
+
+.form-control {
+    padding: 14px 18px;
+    border-radius: 8px;
+    border: 1px solid #d1d1d1;
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.form-control:focus {
+    border-color: #006bff;
+    box-shadow: 0 0 0 4px rgba(0, 107, 255, 0.1);
+}
+
+.btn-continue {
+    background-color: #006bff;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 30px;
+    font-weight: 700;
+    width: 100%;
+    font-size: 16px;
+    transition: all 0.2s;
+}
+
+.btn-continue:hover {
+    background-color: #0056cc;
+    transform: translateY(-1px);
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 25px 0;
+    color: #666;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #ececec;
+}
+
+.divider span { padding: 0 15px; }
+
+.btn-google {
+    background: white;
+    border: 1px solid #d1d1d1;
+    padding: 12px;
+    border-radius: 30px;
+    width: 100%;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: background 0.2s;
+}
+
+.btn-google:hover {
+    background-color: #f1f1f1;
+}
