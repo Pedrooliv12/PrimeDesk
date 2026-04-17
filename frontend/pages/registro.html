@@ -11,31 +11,37 @@
 </head>
 <body>
 
-    <div class="register-container">
-        <a href="landingpage.html" class="logo-text">
-            <span style="color: #006bff;">Prime</span>Desk
-        </a>
-
-        <h2 class="fw-800 mb-2">Crie sua conta gratuita</h2>
-        <p class="text-secondary mb-4">Nenhum cartão de crédito é necessário!</p>
-
-        <form action="registro-detalhes.html" method="GET">
-            <input type="email" name="email" class="form-control" placeholder="Endereço de e-mail" required>
-            <button type="submit" class="btn-continue">Continuar com email</button>
-        </form>
-
-        <div class="divider">
-            <span>OU</span>
+    <nav class="navbar navbar-expand-lg bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="./index.html">
+                <img src="../assets/img/logo.svg" alt="PrimeDesk" width="40">
+            </a>
         </div>
+    </nav>
 
-        <button class="btn-google">
-            <img src="https://www.google.com/favicon.ico" width="18" alt="Google"> 
-            Inscrever-se com Google
-        </button>
-        
-        <p class="mt-5 small text-secondary">
-            Já tem uma conta? <a href="login.html" class="text-primary text-decoration-none fw-bold">Entrar</a>
-        </p>
+    <div class="register-container">
+        <div class="register-card">
+            <h2 class="title-register">Crie sua conta gratuita</h2>
+            <p class="register-subtitle">Nenhum cartão de crédito é necessário!</p>
+
+            <form action="registro-detalhes.html" method="GET">
+                <input type="email" name="email" class="form-control" placeholder="Endereço de e-mail" required>
+                <button type="submit" class="btn-primary w-100">Continuar com email</button>
+            </form>
+
+            <div class="divider">
+                <span>OU</span>
+            </div>
+
+            <button class="btn-google">
+                <img src="https://www.google.com/favicon.ico" width="18" alt="Google"> 
+                Inscrever-se com Google
+            </button>
+            
+            <p class="mt-5 small text-muted">
+                Já tem uma conta? <a href="login.html" class="text-primary text-decoration-none fw-bold">Entrar</a>
+            </p>
+        </div>
     </div>
 </body>
 </html>
