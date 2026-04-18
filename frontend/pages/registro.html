@@ -13,7 +13,7 @@
 
     <nav class="navbar navbar-expand-lg bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="./index.html">
+            <a class="navbar-brand" href="./landingpage.html">
                 <img src="../assets/img/logo.svg" alt="PrimeDesk" width="40">
             </a>
         </div>
@@ -24,10 +24,18 @@
             <h2 class="title-register">Crie sua conta gratuita</h2>
             <p class="register-subtitle">Nenhum cartão de crédito é necessário!</p>
 
-            <form action="registro-detalhes.html" method="GET">
-                <input type="email" name="email" class="form-control" placeholder="Endereço de e-mail" required>
+            <form id="formEmail" method="GET">
+                <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Endereço de e-mail" required>
                 <button type="submit" class="btn-primary w-100">Continuar com email</button>
             </form>
+
+            <script>
+                document.getElementById('formEmail').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const email = document.getElementById('inputEmail').value;
+                    window.location.href = `registro-detalhes.html?email=${encodeURIComponent(email)}`;
+                });
+            </script>
 
             <div class="divider">
                 <span>OU</span>

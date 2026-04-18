@@ -3,6 +3,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const companyRoutes = require('./routes/companyRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 
@@ -15,5 +16,6 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/empresas', companyRoutes);
+app.use('/api/auth', authRoutes);
 
 module.exports = app;

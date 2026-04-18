@@ -12,25 +12,80 @@
 
     <nav class="navbar navbar-expand-lg bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="./index.html">
+            <a class="navbar-brand" href="./landingpage.html">
                 <img src="../assets/img/logo.svg" alt="PrimeDesk" width="40">
             </a>
         </div>
     </nav>
 
     <div class="d-flex align-items-center justify-content-center min-vh-100 px-3">
-        <form class="login-card">
+        <form class="login-card" id="formLogin">
             <h2 class="h4 fw-bold text-center mb-2">Entre em sua conta</h2>
             <p class="text-muted text-center mb-4">Bem-vindo de volta!</p>
 
             <label class="form-label">Email</label>
-            <input type="email" placeholder="seuemail@empresa.com" class="form-control" required>
+            <input type="email" id="inputEmailLogin" placeholder="seuemail@empresa.com" class="form-control" required>
 
             <label class="form-label">Senha</label>
-            <input type="password" placeholder="••••••••" class="form-control" required>
+            <input type="password" id="inputSenhaLogin" placeholder="••••••••" class="form-control" required>
 
-        <a href="#">Esqueci minha senha</a>
-    </form>
+            <button type="submit" class="btn btn-primary w-100 mt-3">Entrar</button>
+
+            <p id="mensagem-erro-login" class="text-danger small mt-3 text-center" style="display: none;"></p>
+            <p id="mensagem-sucesso-login" class="text-success small mt-3 text-center" style="display: none;"></p>
+
+            <p class="text-center mt-4 small">
+                Não tem conta? <a href="registro.html" class="text-primary text-decoration-none fw-bold">Registrar-se</a>
+            </p>
+            <p class="text-center mt-2">
+                <a href="#">Esqueci minha senha</a>
+            </p>
+        </form>
+
+        <script>
+            document.getElementById('formLogin').addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const email = document.getElementById('inputEmailLogin').value;
+                const senha = document.getElementById('inputSenhaLogin').value;
+                const erroMsg = document.getElementById('mensagem-erro-login');
+                const sucessoMsg = document.getElementById('mensagem-sucesso-login');
+
+                erroMsg.style.display = 'none';
+                sucessoMsg.style.display = 'none';
+
+                try {
+                    const response = await fetch('http://localhost:3000/api/auth/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email_empresa: email,
+                            senha_empresa: senha
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        sucessoMsg.textContent = 'Login realizado com sucesso! Redirecionando...';
+                        sucessoMsg.style.display = 'block';
+                        localStorage.setItem('empresa', JSON.stringify(data.empresa));
+                        setTimeout(() => {
+                            window.location.href = 'dashboard.html';
+                        }, 2000);
+                    } else {
+                        erroMsg.textContent = data.message || 'Email ou senha incorretos.';
+                        erroMsg.style.display = 'block';
+                    }
+                } catch (error) {
+                    erroMsg.textContent = 'Erro de conexão. Tente novamente.';
+                    erroMsg.style.display = 'block';
+                    console.error('Erro:', error);
+                }
+            });
+        </script>
 
 </body>
 </html>
