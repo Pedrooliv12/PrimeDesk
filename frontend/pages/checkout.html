@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | PrimeDesk</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/checkout.css">
+</head>
+<body>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-8">
+                
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold">Checkout</h2>
+                </div>
+
+                <div class="checkout-card">
+                    <form action="dashboard.html" method="GET" id="checkoutForm">
+                        <input type="hidden" name="plano_tipo" id="hidden-plan-id">
+
+                        <div id="step1">
+                            <span class="step-indicator">Passo 1 de 2</span>
+                            <h4 class="fw-bold mb-4">Crie sua conta</h4>
+                            
+                            <label class="form-label small fw-bold text-secondary">E-MAIL</label>
+                            <input type="email" name="user_email" class="form-control" placeholder="seu@email.com" required>
+
+                            <label class="form-label small fw-bold text-secondary">SENHA</label>
+                            <input type="password" name="user_password" class="form-control" placeholder="••••••••" required>
+
+                            <button type="button" class="btn-next mt-3" onclick="nextStep()">Continuar para Pagamento</button>
+                        </div>
+
+                        <div id="step2" class="hidden">
+                            <span class="step-indicator">Passo 2 de 2</span>
+                            <h4 class="fw-bold mb-2">Forma de Pagamento</h4>
+                            
+                            <div class="plan-badge">
+                                <span class="small text-secondary">Plano:</span>
+                                <span id="display-plano-nome" class="fw-bold text-white text-uppercase">--</span>
+                            </div>
+
+                            <p class="small text-secondary mb-4">Selecione como deseja simular o pagamento:</p>
+
+                            <div class="method-card active" onclick="selectMethod(this)">
+                                <div class="fs-4 me-3">💳</div>
+                                <div>
+                                    <strong class="d-block">Cartão de Crédito</strong>
+                                    <span class="small text-secondary">Aprovação imediata</span>
+                                </div>
+                            </div>
+
+                            <div class="method-card" onclick="selectMethod(this)">
+                                <div class="fs-4 me-3">⚡</div>
+                                <div>
+                                    <strong class="d-block">Pix</strong>
+                                    <span class="small text-secondary">Código gerado na hora</span>
+                                </div>
+                            </div>
+
+                            <div class="method-card" onclick="selectMethod(this)">
+                                <div class="fs-4 me-3">📄</div>
+                                <div>
+                                    <strong class="d-block">Boleto Bancário</strong>
+                                    <span class="small text-secondary">Até 3 dias úteis</span>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-finish mt-3">Finalizar Assinatura</button>
+                            <button type="button" class="btn btn-link btn-sm w-100 text-secondary mt-2 text-decoration-none" onclick="prevStep()">Voltar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const nomesPlanos = {
+            'mensal': 'Mensal',
+            'anual': 'Anual',
+            'trimestral': 'Trimestral'
+        };
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const plano = urlParams.get('plano');
+
+        if (plano) {
+            document.getElementById('hidden-plan-id').value = plano;
+            // Preenche o nome no display (mesmo que esteja escondido no step 1)
+            const displayNome = nomesPlanos[plano] || plano;
+            document.getElementById('display-plano-nome').innerText = displayNome;
+        } else {
+            window.location.href = 'planos.html';
+        }
+
+        function nextStep() {
+            const email = document.querySelector('input[name="user_email"]').value;
+            const pass = document.querySelector('input[name="user_password"]').value;
+            
+            if(email && pass) {
+                document.getElementById('step1').classList.add('hidden');
+                document.getElementById('step2').classList.remove('hidden');
+            } else {
+                alert("Por favor, preencha o e-mail e a senha.");
+            }
+        }
+
+        function prevStep() {
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step1').classList.remove('hidden');
+        }
+
+        function selectMethod(element) {
+            document.querySelectorAll('.method-card').forEach(card => card.classList.remove('active'));
+            element.classList.add('active');
+        }
+    </script>
+</body>
+</html>

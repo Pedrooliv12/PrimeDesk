@@ -1,0 +1,133 @@
+:root {
+    --pallet-blue: #0099ff;
+    --pallet-green: #73d700;
+    --pallet-gradient: linear-gradient(135deg, #0099ff 0%, #73d700 100%);
+    --background-dark: #23272a;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--background-dark);
+    color: white;
+    margin: 0;
+}
+
+.navbar { 
+    padding: 1.2rem 5%;
+    background-color: var(--background-dark);
+}
+
+.logo {
+    text-decoration: none;
+}
+
+.nav-link { 
+    color: white !important; 
+    font-weight: 600; 
+    margin: 0 15px; 
+    font-size: 0.95rem; 
+}
+
+.nav-link:hover { 
+    color: var(--pallet-green) !important; 
+}
+
+.btn-secondary {
+    background-color: transparent !important;
+    color: white;
+    padding: 10px 25px !important;
+    border-radius: 30px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.2s;
+    border: 1px solid #4f545c !important;
+}
+
+.btn-secondary:hover {
+    background-color: #4f545c !important;
+    color: white;
+}
+
+.details-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.details-card {
+    background: #2f3136;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.05);
+    padding: 50px;
+    max-width: 440px;
+    width: 100%;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+}
+
+.title-details {
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.details-subtitle {
+    font-size: 0.95rem;
+    color: #b9bbbe;
+    margin-bottom: 30px;
+}
+
+.form-label {
+    font-weight: 700;
+    font-size: 13px;
+    color: #72767d;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.form-control {
+    background: #23272a !important;
+    border: 1px solid #4f545c !important;
+    color: white !important;
+    border-radius: 10px;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+}
+
+.form-control::placeholder {
+    color: #72767d;
+}
+
+.form-control:focus {
+    border-color: var(--pallet-blue) !important;
+    box-shadow: 0 0 0 4px rgba(0, 153, 255, 0.1) !important;
+    background-color: #23272a !important;
+}
+
+.form-control-readonly {
+    background-color: #2f3136 !important;
+    color: #b9bbbe;
+    cursor: not-allowed;
+    border-style: dashed;
+}
+
+.btn-finish-reg {
+    background: var(--pallet-gradient);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 30px;
+    font-weight: 700;
+    width: 100%;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 153, 255, 0.2);
+}
+
+.btn-finish-reg:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 25px rgba(115, 215, 0, 0.3);
+    color: white;
+}
