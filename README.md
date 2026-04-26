@@ -70,9 +70,9 @@ Abra a pasta `frontend` em um navegador ou use Live Server no VS Code.
 ## 🚀 Como Usar
 
 ### Registro
-1. Acesse `http://localhost/frontend/index.html` ou abra a pasta
+1. Abra a pasta `frontend` com Live Server no VS Code (ou acesse a URL local do servidor)
 2. Clique em **"Começar Agora"**
-3. Insira email → nome da empresa → senha (mín. 8 caracteres)
+3. Insira email → nome da empresa → senha (mín. 6 caracteres)
 4. Clique em **"Criar Conta"**
 5. Será redirecionado ao dashboard
 
@@ -91,30 +91,33 @@ PrimeDesk/
 ├── backend/
 │   ├── src/
 │   │   ├── app.js
-│   │   ├── server.js
-│   │   ├── config/
-│   │   │   └── db.js
+│   │   ├── db/
+│   │   │   └── index.js
 │   │   ├── controllers/
-│   │   │   ├── authController.js
-│   │   │   └── companyController.js
+│   │   │   └── authController.js
+│   │   ├── middlewares/
+│   │   │   └── auth.js
 │   │   └── routes/
-│   │       ├── authRoutes.js
-│   │       └── companyRoutes.js
+│   │       └── auth.js
+│   ├── server.js
 │   ├── .env
 │   ├── init.sql
 │   └── package.json
 │
 └── frontend/
     ├── index.html
-    ├── pages/
-    │   ├── landingpage.html
-    │   ├── registro.html
-    │   ├── registro-detalhes.html
-    │   ├── login.html
-    │   └── dashboard.html
-    ├── assets/
-    │   ├── css/
-    │   └── img/
+    ├── cadastro.html
+    ├── login.html
+    ├── dashboard.html
+    ├── css/
+    │   ├── landing.css
+    │   ├── cadastro.css
+    │   ├── login.css
+    │   └── dashboard.css
+    └── js/
+        ├── cadastro.js
+        ├── login.js
+        └── dashboard.js
 ```
 
 ---
@@ -122,12 +125,8 @@ PrimeDesk/
 ## 🔌 API Endpoints
 
 ### Autenticação
-- **POST** `/api/auth/register` - Registrar nova empresa
-- **POST** `/api/auth/login` - Fazer login
-
-### Empresas
-- **GET** `/api/empresas` - Listar todas as empresas
-- **POST** `/api/empresas` - Criar nova empresa
+- **POST** `/auth/cadastro` - Registrar nova empresa
+- **POST** `/auth/login` - Fazer login
 
 ---
 
