@@ -3,6 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const authRoutes = require('./routes/auth');
 const profissionaisRoutes = require('./routes/profissionais');
+const horariosRoutes = require('./routes/horarios');
 
 const app = express();
 
@@ -16,5 +17,6 @@ app.get('/health', (req, res) => {
 
 app.use('/auth', authRoutes);
 app.use('/profissionais', profissionaisRoutes);
+app.use('/horarios', horariosRoutes);
 
 module.exports = app;

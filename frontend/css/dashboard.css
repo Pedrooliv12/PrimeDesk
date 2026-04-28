@@ -364,3 +364,75 @@ body {
   outline: none;
   background: var(--background-dark) !important;
 }
+
+select.form-control {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23b9bbbe' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 30px !important;
+}
+
+select.form-control option {
+  background: var(--card-dark);
+  color: white;
+}
+
+/* ── Grid de horários ── */
+.horarios-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.horario-card {
+  background: var(--card-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: border-color 0.2s;
+}
+
+.horario-card:hover { border-color: var(--pallet-blue); }
+
+.horario-header {
+  flex-shrink: 0;
+}
+
+.badge-status {
+  font-size: 0.75rem;
+  color: var(--pallet-green);
+  background: rgba(115, 215, 0, 0.1);
+  border: 1px solid rgba(115, 215, 0, 0.2);
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.horario-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.horario-info h5 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  margin: 0 0 4px 0;
+}
+
+.horario-data {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.horario-actions {
+  display: flex;
+  gap: 8px;
+}

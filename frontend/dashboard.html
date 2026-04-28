@@ -21,6 +21,9 @@
       <a href="#" class="nav-item active" data-view="agendas">
         <i class="bi bi-people"></i> Profissionais
       </a>
+      <a href="#" class="nav-item" data-view="horarios">
+        <i class="bi bi-clock"></i> Horários
+      </a>
       <a href="#" class="nav-item" data-view="agendamentos">
         <i class="bi bi-calendar-check"></i> Agendamentos
       </a>
@@ -68,6 +71,34 @@
       </div>
     </div>
 
+    <!-- View: Horários -->
+    <div id="viewHorarios" class="d-none">
+      <div class="content-header">
+        <div>
+          <h2>Horários Disponíveis</h2>
+          <p class="content-subtitle">Gerencie os horários dos seus profissionais</p>
+        </div>
+        <button class="btn-create" id="btnCriarHorario">
+          <i class="bi bi-plus-lg"></i> Novo Horário
+        </button>
+      </div>
+
+      <div id="alertaHorario" class="alerta d-none"></div>
+
+      <div id="listaHorarios" class="horarios-grid">
+        <!-- cards injetados via JS -->
+      </div>
+
+      <div id="emptyHorarios" class="empty-state d-none">
+        <i class="bi bi-clock" style="font-size: 2.5rem; color: #4f545c;"></i>
+        <h4>Nenhum horário cadastrado</h4>
+        <p>Crie horários disponíveis para seus profissionais receberem agendamentos.</p>
+        <button class="btn-create" onclick="document.getElementById('btnCriarHorario').click()">
+          <i class="bi bi-plus-lg"></i> Criar horário
+        </button>
+      </div>
+    </div>
+
     <!-- View: Agendamentos -->
     <div id="viewAgendamentos" class="d-none">
       <div class="content-header">
@@ -90,15 +121,15 @@
 
   </main>
 
-  <!-- Modal: Criar / Editar Profissional -->
-  <div class="modal-overlay d-none" id="modalOverlay">
+  <!-- Modal: Criar Profissional -->
+  <div class="modal-overlay d-none" id="modalProfissional">
     <div class="modal-card">
       <div class="modal-header-custom">
-        <h5 id="modalTitulo">Novo Profissional</h5>
-        <button class="modal-close" id="modalClose"><i class="bi bi-x-lg"></i></button>
+        <h5 id="modalTituloProfissional">Novo Profissional</h5>
+        <button class="modal-close" id="modalCloseProfissional"><i class="bi bi-x-lg"></i></button>
       </div>
 
-      <div id="alertaModal" class="alerta d-none"></div>
+      <div id="alertaModalProfissional" class="alerta d-none"></div>
 
       <form id="formProfissional" novalidate>
         <input type="hidden" id="profissionalId" />
@@ -109,6 +140,32 @@
         <input type="text" id="especialidade" class="form-control" placeholder="Ex: Cardiologia" required />
 
         <button type="submit" class="btn-create w-100 mt-4" id="btnSalvarProfissional">
+          Salvar
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Criar Horário -->
+  <div class="modal-overlay d-none" id="modalHorario">
+    <div class="modal-card">
+      <div class="modal-header-custom">
+        <h5>Novo Horário</h5>
+        <button class="modal-close" id="modalCloseHorario"><i class="bi bi-x-lg"></i></button>
+      </div>
+
+      <div id="alertaModalHorario" class="alerta d-none"></div>
+
+      <form id="formHorario" novalidate>
+        <label class="form-label">Profissional</label>
+        <select id="profissionalSelect" class="form-control" required>
+          <option value="">Selecione um profissional</option>
+        </select>
+
+        <label class="form-label mt-3">Data e Hora</label>
+        <input type="datetime-local" id="dataHoraInicio" class="form-control" required />
+
+        <button type="submit" class="btn-create w-100 mt-4" id="btnSalvarHorario">
           Salvar
         </button>
       </form>
