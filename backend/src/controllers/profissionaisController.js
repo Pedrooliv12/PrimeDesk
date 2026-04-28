@@ -30,4 +30,46 @@ async function listarProfissionais(req, res) {
     return res.json({ profissionais: profissionais.rows });
 }
 
-module.exports = { cadastroProfissional, listarProfissionais };
+async function editarProfissional(req, res) {
+    const { id } = req.params;
+    const id_empresa = req.empresa.id;
+    const { nome_profissional, especialidade } = req.body;
+
+    if (!nome_profissional || !especialidade) {
+        return res.status(400).json({ erro: 'nome_profissional e especialidade são obrigatórios.' });
+    }
+
+    const profissionalEditado = await pool.query(
+        `UPDATE profissionais
+         SET nome_profissional = $1, especialidade = $2
+         WHERE id = $3 AND id_empresa = $4
+         RETURNING id, nome_profissional, especialidade`,
+        [nome_profissional, especialidade, id, id_empresa]
+    );
+
+    if (profissionalEditado.rows.length === 0) {
+        return res.status(404).json({ erro: 'Profissional não encontrado.' });
+    }
+
+    return res.json({ profissional: profissionalEditado.rows[0] });
+}
+
+async function deletarProfissional(req, res) {
+    const { id } = req.params;
+    const id_empresa = req.empresa.id;
+
+    const profissionalDeletado = await pool.query(
+        `DELETE FROM profissionais
+         WHERE id = $1 AND id_empresa = $2
+         RETURNING id`,
+        [id, id_empresa]
+    );
+
+    if (profissionalDeletado.rows.length === 0) {
+        return res.status(404).json({ erro: 'Profissional não encontrado.' });
+    }
+
+    return res.json({ mensagem: 'Profissional deletado com sucesso.' });
+}
+
+module.exports = { cadastroProfissional, listarProfissionais, editarProfissional, deletarProfissional };
