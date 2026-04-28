@@ -66,7 +66,7 @@ async function loginEmpresa(req, res) {
   const token = jwt.sign(
     { id: empresa.id, nome_empresa: empresa.nome_empresa },
     process.env.JWT_SECRET,
-    { expiresIn: '7d' }
+    { expiresIn: '1d' }
   );
 
   return res.json({

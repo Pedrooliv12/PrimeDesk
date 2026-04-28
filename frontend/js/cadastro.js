@@ -32,7 +32,7 @@ form.addEventListener('submit', async (e) => {
   btnSubmit.textContent = 'Criando conta...';
 
   try {
-    const res = await fetch(`${API}/auth/cadastro`, {
+    const res = await fetch(`${API}/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nome_empresa, email_empresa, senha_empresa }),
