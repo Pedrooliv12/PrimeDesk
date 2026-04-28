@@ -32,7 +32,7 @@ async function cadastroEmpresa(req, res) {
   const empresaCadastrada = await pool.query(
     `INSERT INTO empresas (nome_empresa, email_empresa, senha_empresa)
      VALUES ($1, $2, $3)
-     RETURNING id, nome_empresa, email_empresa, status_assinatura`,
+     RETURNING id, nome_empresa, email_empresa`,
     [nome_empresa, email_empresa, senhaHash]
   );
 
@@ -75,7 +75,6 @@ async function loginEmpresa(req, res) {
       id: empresa.id,
       nome_empresa: empresa.nome_empresa,
       email_empresa: empresa.email_empresa,
-      status_assinatura: empresa.status_assinatura,
     },
   });
 }

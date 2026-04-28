@@ -5,8 +5,7 @@ CREATE TABLE IF NOT EXISTS "empresas" (
   "id" SERIAL PRIMARY KEY,
   "nome_empresa" varchar(150),
   "email_empresa" varchar(255) UNIQUE,
-  "senha_empresa" varchar(255),
-  "status_assinatura" varchar(20) DEFAULT 'pendente'
+  "senha_empresa" varchar(255)
 );
 
 CREATE TABLE IF NOT EXISTS "profissionais" (
@@ -29,6 +28,7 @@ CREATE TABLE IF NOT EXISTS "agendamentos" (
   "nome_cliente" varchar(100),
   "cliente_whatsapp" varchar(15),
   "cliente_email" varchar(255),
-  "pago" boolean DEFAULT false,
-  "confirmado" boolean DEFAULT false
+  "confirmado" boolean DEFAULT false,
+  "lido" boolean DEFAULT false,
+  "criado_em" timestamp DEFAULT CURRENT_TIMESTAMP
 );
