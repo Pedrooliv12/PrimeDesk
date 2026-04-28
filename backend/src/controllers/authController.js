@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const pool = require('../db');
 
-async function cadastro(req, res) {
+async function cadastroEmpresa(req, res) {
   const { nome_empresa, senha_empresa } = req.body;
   const email_empresa = req.body.email_empresa?.toLowerCase().trim();
 
@@ -29,17 +29,17 @@ async function cadastro(req, res) {
 
   const senhaHash = await bcrypt.hash(senha_empresa, 10);
 
-  const resultado = await pool.query(
+  const empresaCadastrada = await pool.query(
     `INSERT INTO empresas (nome_empresa, email_empresa, senha_empresa)
      VALUES ($1, $2, $3)
      RETURNING id, nome_empresa, email_empresa, status_assinatura`,
     [nome_empresa, email_empresa, senhaHash]
   );
 
-  return res.status(201).json({ empresa: resultado.rows[0] });
+  return res.status(201).json({ empresa: empresaCadastrada.rows[0] });
 }
 
-async function login(req, res) {
+async function loginEmpresa(req, res) {
   const { senha_empresa } = req.body;
   const email_empresa = req.body.email_empresa?.toLowerCase().trim();
 
@@ -47,12 +47,12 @@ async function login(req, res) {
     return res.status(400).json({ erro: 'email_empresa e senha_empresa são obrigatórios.' });
   }
 
-  const resultado = await pool.query(
+  const empresaBuscada = await pool.query(
     'SELECT * FROM empresas WHERE email_empresa = $1',
     [email_empresa]
   );
 
-  const empresa = resultado.rows[0];
+  const empresa = empresaBuscada.rows[0];
 
   if (!empresa) {
     return res.status(401).json({ erro: 'Credenciais inválidas.' });
@@ -80,4 +80,4 @@ async function login(req, res) {
   });
 }
 
-module.exports = { cadastro, login };
+module.exports = { cadastroEmpresa, loginEmpresa };
