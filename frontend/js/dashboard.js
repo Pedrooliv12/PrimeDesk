@@ -17,9 +17,7 @@ document.querySelectorAll('.nav-item[data-view]').forEach(item => {
     const view = item.dataset.view;
     document.getElementById('viewAgendas').classList.toggle('d-none', view !== 'agendas');
     document.getElementById('viewHorarios').classList.toggle('d-none', view !== 'horarios');
-    document.getElementById('viewAgendamentos').classList.toggle('d-none', view !== 'agendamentos');
     if (view === 'horarios') carregarHorarios();
-    if (view === 'agendamentos') carregarAgendamentos();
   });
 });
 
@@ -299,11 +297,6 @@ document.getElementById('formHorario').addEventListener('submit', async (e) => {
     btn.textContent = 'Salvar';
   }
 });
-
-// ── Agendamentos ────────────────────────────────────────
-async function carregarAgendamentos() {
-  // implementado quando a rota /agendamentos estiver pronta
-}
 
 // ── Init ────────────────────────────────────────────────
 carregarProfissionais();

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -o \"getElementById\\('[^']*'\\)\" \"c:\\\\\\\\Users\\\\\\\\pvmgo\\\\\\\\OneDrive\\\\\\\\Documentos\\\\\\\\programming\\\\\\\\Programming training\\\\\\\\Node\\\\\\\\CLAUDE CODE\\\\\\\\PrimeDesk\\\\\\\\frontend\\\\\\\\js\\\\\\\\dashboard.js\")",
+      "Bash(grep -c \"alertaHorario\\\\|alertaModalHorario\\\\|alertaModalProfissional\\\\|alertaProfissional\" \"c:\\\\\\\\Users\\\\\\\\pvmgo\\\\\\\\OneDrive\\\\\\\\Documentos\\\\\\\\programming\\\\\\\\Programming training\\\\\\\\Node\\\\\\\\CLAUDE CODE\\\\\\\\PrimeDesk\\\\\\\\frontend\\\\\\\\js\\\\\\\\dashboard.js\")",
+      "Bash(grep \"alertaProfissional\\\\|alertaHorario\\\\|alertaModalProfissional\\\\|alertaModalHorario\" \"c:\\\\\\\\Users\\\\\\\\pvmgo\\\\\\\\OneDrive\\\\\\\\Documentos\\\\\\\\programming\\\\\\\\Programming training\\\\\\\\Node\\\\\\\\CLAUDE CODE\\\\\\\\PrimeDesk\\\\\\\\frontend\\\\\\\\js\\\\\\\\dashboard.js\")"
+    ]
+  }
+}

@@ -21,14 +21,3 @@ CREATE TABLE IF NOT EXISTS "horarios_disponiveis" (
   "data_hora_inicio" timestamp NOT NULL,
   "status" varchar(20) DEFAULT 'disponivel'
 );
-
-CREATE TABLE IF NOT EXISTS "agendamentos" (
-  "id" SERIAL PRIMARY KEY,
-  "id_horario" integer REFERENCES "horarios_disponiveis" ("id"),
-  "nome_cliente" varchar(100),
-  "cliente_whatsapp" varchar(15),
-  "cliente_email" varchar(255),
-  "confirmado" boolean DEFAULT false,
-  "lido" boolean DEFAULT false,
-  "criado_em" timestamp DEFAULT CURRENT_TIMESTAMP
-);
