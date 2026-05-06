@@ -45,7 +45,7 @@ form.addEventListener('submit', async (e) => {
       return;
     }
 
-    mostrarAlerta('Conta criada com sucesso! Redirecionando...', 'sucesso');
+    mostrarAlerta('Conta criada com sucesso!', 'sucesso');
     setTimeout(() => { window.location.href = 'login.html'; }, 1500);
 
   } catch {

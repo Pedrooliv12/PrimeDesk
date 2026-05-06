@@ -42,9 +42,10 @@ Verifique o arquivo `.env`:
 PORT=3000
 DB_HOST=localhost
 DB_PORT=5432
-DB_USER=postgres
-DB_PASSWORD=postgres
-DB_NAME=primedesk
+DB_USER=seu_usuario
+DB_PASSWORD=sua_senha
+DB_NAME=seu_banco_de_dados
+JWT_SECRET=sua_chave_secreta
 ```
 
 Ajuste as credenciais se necessário.
