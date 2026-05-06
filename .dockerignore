@@ -1,0 +1,10 @@
+**/node_modules
+**/.env
+**/*.log
+.git
+.gitignore
+.claude
+.vscode
+.idea
+README.md
+docker-compose.yml

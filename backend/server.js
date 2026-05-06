@@ -1,5 +1,11 @@
 const path = require('path');
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+const fs = require('fs');
+
+const envPath = path.resolve(__dirname, '../.env');
+if (fs.existsSync(envPath)) {
+  require('dotenv').config({ path: envPath });
+}
+
 const app = require('./src/app');
 const pool = require('./src/db');
 
