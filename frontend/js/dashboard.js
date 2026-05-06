@@ -17,7 +17,7 @@ document.querySelectorAll('.nav-item[data-view]').forEach(item => {
     const view = item.dataset.view;
     document.getElementById('viewAgendas').classList.toggle('d-none', view !== 'agendas');
     document.getElementById('viewHorarios').classList.toggle('d-none', view !== 'horarios');
-    if (view === 'horarios') carregarHorarios();
+    if (view === 'horarios') inicializarDisponibilidades();
   });
 });
 
@@ -163,141 +163,202 @@ async function excluirProfissional(id) {
   }
 }
 
-// ── Horários ──────────────────────────────────────────
-async function carregarHorarios() {
+// ── Disponibilidade semanal ──────────────────────────────
+const DIAS_SEMANA = [
+  { idx: 0, label: 'Dom' },
+  { idx: 1, label: 'Seg' },
+  { idx: 2, label: 'Ter' },
+  { idx: 3, label: 'Qua' },
+  { idx: 4, label: 'Qui' },
+  { idx: 5, label: 'Sex' },
+  { idx: 6, label: 'Sáb' },
+];
+
+let profissionalSelecionadoId = null;
+
+async function inicializarDisponibilidades() {
+  const select = document.getElementById('profissionalDispSelect');
+  select.innerHTML = '<option value="">Selecione um profissional</option>';
+
   try {
-    const res = await fetch(`${API}/horarios`, { headers: authHeader() });
+    const res = await fetch(`${API}/profissionais`, { headers: authHeader() });
     if (res.status === 401) { window.location.href = 'login.html'; return; }
     const data = await res.json();
-    renderHorarios(data.horarios || []);
+    const profissionais = data.profissionais || [];
+
+    if (profissionais.length === 0) {
+      mostrarAlerta('alertaHorario', 'Cadastre profissionais primeiro para definir suas disponibilidades.', 'erro');
+      return;
+    }
+
+    profissionais.forEach(p => {
+      const option = document.createElement('option');
+      option.value = p.id;
+      option.textContent = p.nome_profissional;
+      select.appendChild(option);
+    });
   } catch {
-    mostrarAlerta('alertaHorario', 'Não foi possível carregar os horários.');
+    mostrarAlerta('alertaHorario', 'Não foi possível carregar os profissionais.');
   }
 }
 
-function renderHorarios(lista) {
-  const grid = document.getElementById('listaHorarios');
+document.getElementById('profissionalDispSelect').addEventListener('change', async (e) => {
+  const id = e.target.value;
+  profissionalSelecionadoId = id ? parseInt(id) : null;
+
+  const grid = document.getElementById('semanaGrid');
   const empty = document.getElementById('emptyHorarios');
 
-  if (!lista.length) {
-    grid.innerHTML = '';
+  if (!profissionalSelecionadoId) {
+    grid.classList.add('d-none');
     empty.classList.remove('d-none');
     return;
   }
 
   empty.classList.add('d-none');
-  grid.innerHTML = lista.map(h => `
-    <div class="horario-card">
-      <div class="horario-header">
-        <span class="badge-status">${h.status}</span>
-      </div>
-      <div class="horario-info">
-        <h5>${h.nome_profissional}</h5>
-        <p class="horario-data">${new Date(h.data_hora_inicio).toLocaleString('pt-BR')}</p>
-      </div>
-      <div class="horario-actions">
-        <button class="btn-icon btn-icon-danger" title="Excluir" onclick="excluirHorario(${h.id})">
-          <i class="bi bi-trash"></i>
-        </button>
-      </div>
-    </div>
-  `).join('');
-}
-
-async function excluirHorario(id) {
-  if (!confirm('Excluir este horário?')) return;
-  try {
-    const res = await fetch(`${API}/horarios/${id}`, {
-      method: 'DELETE',
-      headers: authHeader(),
-    });
-    if (res.ok) carregarHorarios();
-    else mostrarAlerta('alertaHorario', 'Erro ao excluir horário.');
-  } catch {
-    mostrarAlerta('alertaHorario', 'Não foi possível conectar ao servidor.');
-  }
-}
-
-async function abrirModalHorario() {
-  document.getElementById('modalHorario').classList.remove('d-none');
-  ocultarAlerta('alertaModalHorario');
-  await preencherSelectProfissionais();
-}
-
-function fecharModalHorario() {
-  document.getElementById('modalHorario').classList.add('d-none');
-  document.getElementById('formHorario').reset();
-}
-
-async function preencherSelectProfissionais() {
-  const select = document.getElementById('profissionalSelect');
-  select.innerHTML = '<option value="">Selecione um profissional</option>';
-
-  const res = await fetch(`${API}/profissionais`, { headers: authHeader() });
-  const data = await res.json();
-  const profissionais = data.profissionais || [];
-
-  if (profissionais.length === 0) {
-    mostrarAlerta('alertaModalHorario', 'Cadastre profissionais primeiro.', 'erro');
-    return;
-  }
-
-  profissionais.forEach(p => {
-    const option = document.createElement('option');
-    option.value = p.id;
-    option.textContent = p.nome_profissional;
-    select.appendChild(option);
-  });
-}
-
-document.getElementById('btnCriarHorario').addEventListener('click', abrirModalHorario);
-document.getElementById('modalCloseHorario').addEventListener('click', fecharModalHorario);
-document.getElementById('modalHorario').addEventListener('click', (e) => {
-  if (e.target === document.getElementById('modalHorario')) fecharModalHorario();
+  grid.classList.remove('d-none');
+  await carregarDisponibilidades();
 });
 
-document.getElementById('formHorario').addEventListener('submit', async (e) => {
+async function carregarDisponibilidades() {
+  if (!profissionalSelecionadoId) return;
+
+  try {
+    const res = await fetch(
+      `${API}/disponibilidades?id_profissional=${profissionalSelecionadoId}`,
+      { headers: authHeader() }
+    );
+    if (res.status === 401) { window.location.href = 'login.html'; return; }
+    const data = await res.json();
+    renderSemana(data.disponibilidades || []);
+  } catch {
+    mostrarAlerta('alertaHorario', 'Não foi possível carregar as disponibilidades.');
+  }
+}
+
+function renderSemana(disponibilidades) {
+  const grid = document.getElementById('semanaGrid');
+  const porDia = {};
+  DIAS_SEMANA.forEach(d => { porDia[d.idx] = []; });
+  disponibilidades.forEach(d => {
+    if (porDia[d.dia_semana]) porDia[d.dia_semana].push(d);
+  });
+  Object.values(porDia).forEach(arr => arr.sort((a, b) => a.hora_inicio.localeCompare(b.hora_inicio)));
+
+  grid.innerHTML = DIAS_SEMANA.map(dia => {
+    const slots = porDia[dia.idx];
+    const slotsHtml = slots.length
+      ? slots.map(s => `
+        <div class="slot-item">
+          <span class="slot-tempo">${formatarHora(s.hora_inicio)} - ${formatarHora(s.hora_fim)}</span>
+          <button class="slot-remover" title="Remover" onclick="excluirDisponibilidade(${s.id})">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+      `).join('')
+      : '<div class="dia-vazio">Sem horários</div>';
+
+    return `
+      <div class="dia-card">
+        <div class="dia-card-header">${dia.label}</div>
+        <div class="dia-slots">${slotsHtml}</div>
+        <button class="btn-add-slot" onclick="abrirModalDisponibilidade(${dia.idx}, '${dia.label}')">
+          <i class="bi bi-plus-lg"></i> Adicionar
+        </button>
+      </div>
+    `;
+  }).join('');
+}
+
+function formatarHora(hhmmss) {
+  return (hhmmss || '').slice(0, 5);
+}
+
+function abrirModalDisponibilidade(diaIdx, diaLabel) {
+  if (!profissionalSelecionadoId) {
+    mostrarAlerta('alertaHorario', 'Selecione um profissional primeiro.', 'erro');
+    return;
+  }
+  document.getElementById('dispDiaSemana').value = diaIdx;
+  document.getElementById('modalDispTitulo').textContent = `Adicionar horário — ${diaLabel}`;
+  document.getElementById('modalDisponibilidade').classList.remove('d-none');
+  ocultarAlerta('alertaModalDisp');
+}
+
+function fecharModalDisponibilidade() {
+  document.getElementById('modalDisponibilidade').classList.add('d-none');
+  document.getElementById('formDisponibilidade').reset();
+}
+
+document.getElementById('modalCloseDisp').addEventListener('click', fecharModalDisponibilidade);
+document.getElementById('modalDisponibilidade').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('modalDisponibilidade')) fecharModalDisponibilidade();
+});
+
+document.getElementById('formDisponibilidade').addEventListener('submit', async (e) => {
   e.preventDefault();
-  ocultarAlerta('alertaModalHorario');
+  ocultarAlerta('alertaModalDisp');
 
-  const id_profissional = document.getElementById('profissionalSelect').value;
-  const dataLocal = document.getElementById('dataHoraInicio').value;
-  const btn = document.getElementById('btnSalvarHorario');
+  const dia_semana = parseInt(document.getElementById('dispDiaSemana').value);
+  const hora_inicio = document.getElementById('dispHoraInicio').value;
+  const hora_fim = document.getElementById('dispHoraFim').value;
+  const btn = document.getElementById('btnSalvarDisp');
 
-  if (!id_profissional) {
-    mostrarAlerta('alertaModalHorario', 'Selecione um profissional.', 'erro');
+  if (!hora_inicio || !hora_fim) {
+    mostrarAlerta('alertaModalDisp', 'Preencha início e fim.', 'erro');
     return;
   }
 
-  const data_hora_inicio = new Date(dataLocal).toISOString();
+  if (hora_inicio >= hora_fim) {
+    mostrarAlerta('alertaModalDisp', 'Hora de início deve ser menor que hora de fim.', 'erro');
+    return;
+  }
 
   btn.disabled = true;
   btn.textContent = 'Salvando...';
 
   try {
-    const res = await fetch(`${API}/horarios`, {
+    const res = await fetch(`${API}/disponibilidades`, {
       method: 'POST',
       headers: authHeader(),
-      body: JSON.stringify({ id_profissional: parseInt(id_profissional), data_hora_inicio }),
+      body: JSON.stringify({
+        id_profissional: profissionalSelecionadoId,
+        dia_semana,
+        hora_inicio,
+        hora_fim,
+      }),
     });
 
     const data = await res.json();
 
     if (!res.ok) {
-      mostrarAlerta('alertaModalHorario', data.erro || 'Erro ao salvar.', 'erro');
+      mostrarAlerta('alertaModalDisp', data.erro || 'Erro ao salvar.', 'erro');
       return;
     }
 
-    fecharModalHorario();
-    carregarHorarios();
+    fecharModalDisponibilidade();
+    carregarDisponibilidades();
   } catch {
-    mostrarAlerta('alertaModalHorario', 'Não foi possível conectar ao servidor.', 'erro');
+    mostrarAlerta('alertaModalDisp', 'Não foi possível conectar ao servidor.', 'erro');
   } finally {
     btn.disabled = false;
-    btn.textContent = 'Salvar';
+    btn.textContent = 'Adicionar';
   }
 });
 
+async function excluirDisponibilidade(id) {
+  if (!confirm('Remover este horário?')) return;
+  try {
+    const res = await fetch(`${API}/disponibilidades/${id}`, {
+      method: 'DELETE',
+      headers: authHeader(),
+    });
+    if (res.ok) carregarDisponibilidades();
+    else mostrarAlerta('alertaHorario', 'Erro ao remover horário.');
+  } catch {
+    mostrarAlerta('alertaHorario', 'Não foi possível conectar ao servidor.');
+  }
+}
+
 // ── Init ────────────────────────────────────────────────
 carregarProfissionais();
-carregarHorarios();

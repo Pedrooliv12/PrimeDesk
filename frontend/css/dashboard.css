@@ -379,7 +379,115 @@ select.form-control option {
   color: white;
 }
 
-/* ── Grid de horários ── */
+/* ── Disponibilidade semanal ── */
+.profissional-selector {
+  max-width: 360px;
+  margin-bottom: 28px;
+}
+
+.semana-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 1100px) {
+  .semana-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 600px) {
+  .semana-grid { grid-template-columns: 1fr; }
+}
+
+.dia-card {
+  background: var(--card-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 180px;
+}
+
+.dia-card-header {
+  font-weight: 800;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: white;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
+}
+
+.dia-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.slot-item {
+  background: var(--card-mid);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: white;
+}
+
+.slot-item .slot-tempo {
+  color: var(--pallet-blue);
+}
+
+.slot-remover {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 2px 4px;
+  transition: color 0.2s;
+}
+
+.slot-remover:hover { color: #ff6b6b; }
+
+.dia-vazio {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: italic;
+  padding: 4px 0;
+}
+
+.btn-add-slot {
+  background: rgba(0, 153, 255, 0.1);
+  border: 1px dashed rgba(0, 153, 255, 0.4);
+  color: var(--pallet-blue);
+  border-radius: 8px;
+  padding: 8px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.btn-add-slot:hover {
+  background: rgba(0, 153, 255, 0.2);
+  border-style: solid;
+}
+
+.row-times {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* ── Grid de horários (legado) ── */
 .horarios-grid {
   display: flex;
   flex-direction: column;

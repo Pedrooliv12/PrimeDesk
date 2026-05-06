@@ -21,3 +21,12 @@ CREATE TABLE IF NOT EXISTS "horarios_disponiveis" (
   "data_hora_inicio" timestamp NOT NULL,
   "status" varchar(20) DEFAULT 'disponivel'
 );
+
+CREATE TABLE IF NOT EXISTS "disponibilidades_horarias" (
+  "id" SERIAL PRIMARY KEY,
+  "id_profissional" integer REFERENCES "profissionais" ("id") ON DELETE CASCADE,
+  "dia_semana" integer NOT NULL CHECK ("dia_semana" BETWEEN 0 AND 6),
+  "hora_inicio" time NOT NULL,
+  "hora_fim" time NOT NULL,
+  CHECK ("hora_inicio" < "hora_fim")
+);

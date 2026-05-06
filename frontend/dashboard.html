@@ -68,31 +68,32 @@
       </div>
     </div>
 
-    <!-- View: Horários -->
+    <!-- View: Horários (Disponibilidade semanal por profissional) -->
     <div id="viewHorarios" class="d-none">
       <div class="content-header">
         <div>
-          <h2>Horários Disponíveis</h2>
-          <p class="content-subtitle">Gerencie os horários dos seus profissionais</p>
+          <h2>Disponibilidade Semanal</h2>
+          <p class="content-subtitle">Defina os horários disponíveis de cada profissional para cada dia da semana</p>
         </div>
-        <button class="btn-create" id="btnCriarHorario">
-          <i class="bi bi-plus-lg"></i> Novo Horário
-        </button>
       </div>
 
       <div id="alertaHorario" class="alerta d-none"></div>
 
-      <div id="listaHorarios" class="horarios-grid">
-        <!-- cards injetados via JS -->
+      <div class="profissional-selector">
+        <label class="form-label">Profissional</label>
+        <select id="profissionalDispSelect" class="form-control">
+          <option value="">Selecione um profissional</option>
+        </select>
       </div>
 
-      <div id="emptyHorarios" class="empty-state d-none">
-        <i class="bi bi-clock" style="font-size: 2.5rem; color: #4f545c;"></i>
-        <h4>Nenhum horário cadastrado</h4>
-        <p>Crie horários disponíveis para seus profissionais receberem agendamentos.</p>
-        <button class="btn-create" onclick="document.getElementById('btnCriarHorario').click()">
-          <i class="bi bi-plus-lg"></i> Criar horário
-        </button>
+      <div id="semanaGrid" class="semana-grid d-none">
+        <!-- 7 colunas de dias injetadas via JS -->
+      </div>
+
+      <div id="emptyHorarios" class="empty-state">
+        <i class="bi bi-calendar-week" style="font-size: 2.5rem; color: #4f545c;"></i>
+        <h4>Selecione um profissional</h4>
+        <p>Escolha um profissional acima para configurar a disponibilidade semanal dele.</p>
       </div>
     </div>
 
@@ -123,27 +124,32 @@
     </div>
   </div>
 
-  <!-- Modal: Criar Horário -->
-  <div class="modal-overlay d-none" id="modalHorario">
+  <!-- Modal: Adicionar slot de disponibilidade -->
+  <div class="modal-overlay d-none" id="modalDisponibilidade">
     <div class="modal-card">
       <div class="modal-header-custom">
-        <h5>Novo Horário</h5>
-        <button class="modal-close" id="modalCloseHorario"><i class="bi bi-x-lg"></i></button>
+        <h5 id="modalDispTitulo">Adicionar horário</h5>
+        <button class="modal-close" id="modalCloseDisp"><i class="bi bi-x-lg"></i></button>
       </div>
 
-      <div id="alertaModalHorario" class="alerta d-none"></div>
+      <div id="alertaModalDisp" class="alerta d-none"></div>
 
-      <form id="formHorario" novalidate>
-        <label class="form-label">Profissional</label>
-        <select id="profissionalSelect" class="form-control" required>
-          <option value="">Selecione um profissional</option>
-        </select>
+      <form id="formDisponibilidade" novalidate>
+        <input type="hidden" id="dispDiaSemana" />
 
-        <label class="form-label mt-3">Data e Hora</label>
-        <input type="datetime-local" id="dataHoraInicio" class="form-control" required />
+        <div class="row-times">
+          <div>
+            <label class="form-label">Início</label>
+            <input type="time" id="dispHoraInicio" class="form-control" required />
+          </div>
+          <div>
+            <label class="form-label">Fim</label>
+            <input type="time" id="dispHoraFim" class="form-control" required />
+          </div>
+        </div>
 
-        <button type="submit" class="btn-create w-100 mt-4" id="btnSalvarHorario">
-          Salvar
+        <button type="submit" class="btn-create w-100 mt-4" id="btnSalvarDisp">
+          Adicionar
         </button>
       </form>
     </div>
