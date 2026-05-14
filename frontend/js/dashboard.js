@@ -8,15 +8,18 @@ if (!token || !empresa) {
 
 document.getElementById('nomeEmpresa').textContent = empresa?.nome_empresa || '';
 
-// ── Navegação ──────────────────────────────────────────
-document.querySelectorAll('.nav-item[data-view]').forEach(item => {
+const navItems = document.querySelectorAll('.nav-item[data-view]');
+const viewAgendas = document.getElementById('viewAgendas');
+const viewHorarios = document.getElementById('viewHorarios');
+
+navItems.forEach(item => {
   item.addEventListener('click', (e) => {
     e.preventDefault();
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    navItems.forEach(n => n.classList.remove('active'));
     item.classList.add('active');
     const view = item.dataset.view;
-    document.getElementById('viewAgendas').classList.toggle('d-none', view !== 'agendas');
-    document.getElementById('viewHorarios').classList.toggle('d-none', view !== 'horarios');
+    viewAgendas.classList.toggle('d-none', view !== 'agendas');
+    viewHorarios.classList.toggle('d-none', view !== 'horarios');
     if (view === 'horarios') inicializarDisponibilidades();
   });
 });
@@ -27,7 +30,6 @@ document.getElementById('btnSair').addEventListener('click', () => {
   window.location.href = 'login.html';
 });
 
-// ── Helpers ────────────────────────────────────────────
 function authHeader() {
   return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };
 }
@@ -42,13 +44,36 @@ function ocultarAlerta(id) {
   document.getElementById(id).className = 'alerta d-none';
 }
 
-// ── Profissionais ───────────────────────────────────────
+function abrirModal(id) {
+  document.getElementById(id).classList.remove('d-none');
+}
+
+function fecharModal(id, formId) {
+  document.getElementById(id).classList.add('d-none');
+  if (formId) document.getElementById(formId).reset();
+}
+
+function setButtonLoading(btnId, loading) {
+  const btn = document.getElementById(btnId);
+  btn.disabled = loading;
+  btn.textContent = loading ? 'Salvando...' : btn.dataset.originalText;
+}
+
+function escapeHtml(texto) {
+  const div = document.createElement('div');
+  div.textContent = texto;
+  return div.innerHTML;
+}
+
+let profissionaisCached = null;
+
 async function carregarProfissionais() {
   try {
     const res = await fetch(`${API}/profissionais`, { headers: authHeader() });
     if (res.status === 401) { window.location.href = 'login.html'; return; }
     const data = await res.json();
-    renderProfissionais(data.profissionais || []);
+    profissionaisCached = data.profissionais || [];
+    renderProfissionais(profissionaisCached);
   } catch {
     mostrarAlerta('alertaProfissional', 'Não foi possível carregar os profissionais.');
   }
@@ -65,62 +90,70 @@ function renderProfissionais(lista) {
   }
 
   empty.classList.add('d-none');
-  grid.innerHTML = lista.map(p => `
-    <div class="profissional-card">
-      <div class="profissional-avatar">${p.nome_profissional.charAt(0).toUpperCase()}</div>
-      <div class="profissional-info">
-        <h4>${p.nome_profissional}</h4>
-        <span class="badge-especialidade">${p.especialidade || 'Sem especialidade'}</span>
+  grid.innerHTML = lista.map(p => {
+    const nome = escapeHtml(p.nome_profissional || '');
+    const especialidade = escapeHtml(p.especialidade || 'Sem especialidade');
+    const inicial = (p.nome_profissional || 'N').charAt(0).toUpperCase();
+    return `
+      <div class="profissional-card" data-id="${p.id}" data-nome="${nome}" data-especialidade="${especialidade}">
+        <div class="profissional-avatar">${escapeHtml(inicial)}</div>
+        <div class="profissional-info">
+          <h4>${nome}</h4>
+          <span class="badge-especialidade">${especialidade}</span>
+        </div>
+        <div class="profissional-actions">
+          <button class="btn-icon btn-editar" title="Editar"><i class="bi bi-pencil"></i></button>
+          <button class="btn-icon btn-icon-danger btn-deletar" title="Excluir"><i class="bi bi-trash"></i></button>
+        </div>
       </div>
-      <div class="profissional-actions">
-        <button class="btn-icon" title="Editar" onclick="abrirEdicao(${p.id}, '${p.nome_profissional}', '${p.especialidade || ''}')">
-          <i class="bi bi-pencil"></i>
-        </button>
-        <button class="btn-icon btn-icon-danger" title="Excluir" onclick="excluirProfissional(${p.id})">
-          <i class="bi bi-trash"></i>
-        </button>
-      </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
-// ── Modal Profissional ──────────────────────────────────
-function abrirModalProfissional(titulo = 'Novo Profissional') {
-  document.getElementById('modalTituloProfissional').textContent = titulo;
-  document.getElementById('modalProfissional').classList.remove('d-none');
+const modalProfissional = document.getElementById('modalProfissional');
+const formProfissional = document.getElementById('formProfissional');
+const modalTituloProfissional = document.getElementById('modalTituloProfissional');
+const profissionalIdInput = document.getElementById('profissionalId');
+
+document.getElementById('btnCriarProfissional').addEventListener('click', () => {
+  modalTituloProfissional.textContent = 'Novo Profissional';
+  profissionalIdInput.value = '';
+  abrirModal('modalProfissional');
   ocultarAlerta('alertaModalProfissional');
-}
-
-function fecharModalProfissional() {
-  document.getElementById('modalProfissional').classList.add('d-none');
-  document.getElementById('formProfissional').reset();
-  document.getElementById('profissionalId').value = '';
-}
-
-function abrirEdicao(id, nome, especialidade) {
-  document.getElementById('profissionalId').value = id;
-  document.getElementById('nomeProfissional').value = nome;
-  document.getElementById('especialidade').value = especialidade;
-  abrirModalProfissional('Editar Profissional');
-}
-
-document.getElementById('btnCriarProfissional').addEventListener('click', () => abrirModalProfissional());
-document.getElementById('modalCloseProfissional').addEventListener('click', fecharModalProfissional);
-document.getElementById('modalProfissional').addEventListener('click', (e) => {
-  if (e.target === document.getElementById('modalProfissional')) fecharModalProfissional();
 });
 
-document.getElementById('formProfissional').addEventListener('submit', async (e) => {
+document.getElementById('modalCloseProfissional').addEventListener('click', () => fecharModal('modalProfissional', 'formProfissional'));
+modalProfissional.addEventListener('click', (e) => {
+  if (e.target === modalProfissional) fecharModal('modalProfissional', 'formProfissional');
+});
+
+document.getElementById('listaProfissionais').addEventListener('click', (e) => {
+  const card = e.target.closest('.profissional-card');
+  if (!card) return;
+
+  if (e.target.closest('.btn-editar')) {
+    profissionalIdInput.value = card.dataset.id;
+    document.getElementById('nomeProfissional').value = card.dataset.nome;
+    document.getElementById('especialidade').value = card.dataset.especialidade;
+    modalTituloProfissional.textContent = 'Editar Profissional';
+    abrirModal('modalProfissional');
+    ocultarAlerta('alertaModalProfissional');
+  } else if (e.target.closest('.btn-deletar')) {
+    excluirProfissional(card.dataset.id);
+  }
+});
+
+formProfissional.addEventListener('submit', async (e) => {
   e.preventDefault();
   ocultarAlerta('alertaModalProfissional');
 
-  const id = document.getElementById('profissionalId').value;
+  const id = profissionalIdInput.value;
   const nome_profissional = document.getElementById('nomeProfissional').value.trim();
   const especialidade = document.getElementById('especialidade').value.trim();
   const btn = document.getElementById('btnSalvarProfissional');
 
-  btn.disabled = true;
-  btn.textContent = 'Salvando...';
+  btn.dataset.originalText = 'Salvar';
+  setButtonLoading('btnSalvarProfissional', true);
 
   try {
     const url = id ? `${API}/profissionais/${id}` : `${API}/profissionais`;
@@ -139,13 +172,12 @@ document.getElementById('formProfissional').addEventListener('submit', async (e)
       return;
     }
 
-    fecharModalProfissional();
+    fecharModal('modalProfissional', 'formProfissional');
     carregarProfissionais();
   } catch {
     mostrarAlerta('alertaModalProfissional', 'Não foi possível conectar ao servidor.');
   } finally {
-    btn.disabled = false;
-    btn.textContent = 'Salvar';
+    setButtonLoading('btnSalvarProfissional', false);
   }
 });
 
@@ -163,7 +195,6 @@ async function excluirProfissional(id) {
   }
 }
 
-// ── Disponibilidade semanal ──────────────────────────────
 const DIAS_SEMANA = [
   { idx: 0, label: 'Dom' },
   { idx: 1, label: 'Seg' },
@@ -181,12 +212,8 @@ async function inicializarDisponibilidades() {
   select.innerHTML = '<option value="">Selecione um profissional</option>';
 
   try {
-    const res = await fetch(`${API}/profissionais`, { headers: authHeader() });
-    if (res.status === 401) { window.location.href = 'login.html'; return; }
-    const data = await res.json();
-    const profissionais = data.profissionais || [];
-
-    if (profissionais.length === 0) {
+    const profissionais = profissionaisCached || await carregarProfissionalsList();
+    if (!profissionais || profissionais.length === 0) {
       mostrarAlerta('alertaHorario', 'Cadastre profissionais primeiro para definir suas disponibilidades.', 'erro');
       return;
     }
@@ -200,6 +227,14 @@ async function inicializarDisponibilidades() {
   } catch {
     mostrarAlerta('alertaHorario', 'Não foi possível carregar os profissionais.');
   }
+}
+
+async function carregarProfissionalsList() {
+  if (profissionaisCached) return profissionaisCached;
+  const res = await fetch(`${API}/profissionais`, { headers: authHeader() });
+  if (res.status === 401) { window.location.href = 'login.html'; return null; }
+  const data = await res.json();
+  return (profissionaisCached = data.profissionais || []);
 }
 
 document.getElementById('profissionalDispSelect').addEventListener('change', async (e) => {
@@ -248,61 +283,73 @@ function renderSemana(disponibilidades) {
   grid.innerHTML = DIAS_SEMANA.map(dia => {
     const slots = porDia[dia.idx];
     const slotsHtml = slots.length
-      ? slots.map(s => `
-        <div class="slot-item">
-          <span class="slot-tempo">${formatarHora(s.hora_inicio)} - ${formatarHora(s.hora_fim)}</span>
-          <button class="slot-remover" title="Remover" onclick="excluirDisponibilidade(${s.id})">
-            <i class="bi bi-x-lg"></i>
-          </button>
-        </div>
-      `).join('')
+      ? slots.map(s => {
+          const inicio = escapeHtml(s.hora_inicio.slice(0, 5));
+          const fim = escapeHtml(s.hora_fim.slice(0, 5));
+          return `
+            <div class="slot-item" data-id="${s.id}">
+              <span class="slot-tempo">${inicio} - ${fim}</span>
+              <button class="slot-remover" title="Remover"><i class="bi bi-x-lg"></i></button>
+            </div>
+          `;
+        }).join('')
       : '<div class="dia-vazio">Sem horários</div>';
 
     return `
       <div class="dia-card">
         <div class="dia-card-header">${dia.label}</div>
         <div class="dia-slots">${slotsHtml}</div>
-        <button class="btn-add-slot" onclick="abrirModalDisponibilidade(${dia.idx}, '${dia.label}')">
+        <button class="btn-add-slot" data-dia-idx="${dia.idx}" data-dia-label="${dia.label}">
           <i class="bi bi-plus-lg"></i> Adicionar
         </button>
       </div>
     `;
   }).join('');
+
+  setupSlotsEventListeners();
 }
 
-function formatarHora(hhmmss) {
-  return (hhmmss || '').slice(0, 5);
-}
+const modalDisponibilidade = document.getElementById('modalDisponibilidade');
+const formDisponibilidade = document.getElementById('formDisponibilidade');
+const modalDispTitulo = document.getElementById('modalDispTitulo');
+const dispDiaSemana = document.getElementById('dispDiaSemana');
 
-function abrirModalDisponibilidade(diaIdx, diaLabel) {
-  if (!profissionalSelecionadoId) {
-    mostrarAlerta('alertaHorario', 'Selecione um profissional primeiro.', 'erro');
-    return;
-  }
-  document.getElementById('dispDiaSemana').value = diaIdx;
-  document.getElementById('modalDispTitulo').textContent = `Adicionar horário — ${diaLabel}`;
-  document.getElementById('modalDisponibilidade').classList.remove('d-none');
-  ocultarAlerta('alertaModalDisp');
-}
-
-function fecharModalDisponibilidade() {
-  document.getElementById('modalDisponibilidade').classList.add('d-none');
-  document.getElementById('formDisponibilidade').reset();
-}
-
-document.getElementById('modalCloseDisp').addEventListener('click', fecharModalDisponibilidade);
-document.getElementById('modalDisponibilidade').addEventListener('click', (e) => {
-  if (e.target === document.getElementById('modalDisponibilidade')) fecharModalDisponibilidade();
+document.getElementById('modalCloseDisp').addEventListener('click', () => fecharModal('modalDisponibilidade', 'formDisponibilidade'));
+modalDisponibilidade.addEventListener('click', (e) => {
+  if (e.target === modalDisponibilidade) fecharModal('modalDisponibilidade', 'formDisponibilidade');
 });
 
-document.getElementById('formDisponibilidade').addEventListener('submit', async (e) => {
+document.getElementById('semanaGrid').addEventListener('click', (e) => {
+  const btnAdd = e.target.closest('.btn-add-slot');
+  if (btnAdd) {
+    if (!profissionalSelecionadoId) {
+      mostrarAlerta('alertaHorario', 'Selecione um profissional primeiro.', 'erro');
+      return;
+    }
+    dispDiaSemana.value = btnAdd.dataset.diaIdx;
+    modalDispTitulo.textContent = `Adicionar horário — ${btnAdd.dataset.diaLabel}`;
+    abrirModal('modalDisponibilidade');
+    ocultarAlerta('alertaModalDisp');
+  }
+});
+
+function setupSlotsEventListeners() {
+  document.querySelectorAll('.slot-remover').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const slotItem = btn.closest('.slot-item');
+      excluirDisponibilidade(slotItem.dataset.id);
+    });
+  });
+}
+
+formDisponibilidade.addEventListener('submit', async (e) => {
   e.preventDefault();
   ocultarAlerta('alertaModalDisp');
 
-  const dia_semana = parseInt(document.getElementById('dispDiaSemana').value);
+  const dia_semana = parseInt(dispDiaSemana.value);
   const hora_inicio = document.getElementById('dispHoraInicio').value;
   const hora_fim = document.getElementById('dispHoraFim').value;
-  const btn = document.getElementById('btnSalvarDisp');
 
   if (!hora_inicio || !hora_fim) {
     mostrarAlerta('alertaModalDisp', 'Preencha início e fim.', 'erro');
@@ -314,8 +361,9 @@ document.getElementById('formDisponibilidade').addEventListener('submit', async 
     return;
   }
 
-  btn.disabled = true;
-  btn.textContent = 'Salvando...';
+  const btn = document.getElementById('btnSalvarDisp');
+  btn.dataset.originalText = 'Adicionar';
+  setButtonLoading('btnSalvarDisp', true);
 
   try {
     const res = await fetch(`${API}/disponibilidades`, {
@@ -336,13 +384,12 @@ document.getElementById('formDisponibilidade').addEventListener('submit', async 
       return;
     }
 
-    fecharModalDisponibilidade();
+    fecharModal('modalDisponibilidade', 'formDisponibilidade');
     carregarDisponibilidades();
   } catch {
     mostrarAlerta('alertaModalDisp', 'Não foi possível conectar ao servidor.', 'erro');
   } finally {
-    btn.disabled = false;
-    btn.textContent = 'Adicionar';
+    setButtonLoading('btnSalvarDisp', false);
   }
 });
 
@@ -360,5 +407,4 @@ async function excluirDisponibilidade(id) {
   }
 }
 
-// ── Init ────────────────────────────────────────────────
 carregarProfissionais();
