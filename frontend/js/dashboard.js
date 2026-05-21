@@ -11,6 +11,15 @@ document.getElementById('nomeEmpresa').textContent = empresa?.nome_empresa || ''
 const navItems = document.querySelectorAll('.nav-item[data-view]');
 const viewAgendas = document.getElementById('viewAgendas');
 const viewHorarios = document.getElementById('viewHorarios');
+const viewAgendamentos = document.getElementById('viewAgendamentos');
+const viewNotificacoes = document.getElementById('viewNotificacoes');
+
+const VIEWS = {
+  agendas: viewAgendas,
+  horarios: viewHorarios,
+  agendamentos: viewAgendamentos,
+  notificacoes: viewNotificacoes,
+};
 
 navItems.forEach(item => {
   item.addEventListener('click', (e) => {
@@ -18,9 +27,10 @@ navItems.forEach(item => {
     navItems.forEach(n => n.classList.remove('active'));
     item.classList.add('active');
     const view = item.dataset.view;
-    viewAgendas.classList.toggle('d-none', view !== 'agendas');
-    viewHorarios.classList.toggle('d-none', view !== 'horarios');
+    Object.entries(VIEWS).forEach(([key, el]) => el.classList.toggle('d-none', key !== view));
     if (view === 'horarios') inicializarDisponibilidades();
+    if (view === 'agendamentos') carregarAgendamentos();
+    if (view === 'notificacoes') carregarNotificacoes();
   });
 });
 
@@ -28,6 +38,19 @@ document.getElementById('btnSair').addEventListener('click', () => {
   localStorage.removeItem('token');
   localStorage.removeItem('empresa');
   window.location.href = 'login.html';
+});
+
+document.getElementById('btnCopiarLink').addEventListener('click', () => {
+  const slug = empresa?.slug;
+  if (!slug) return;
+  const link = `${window.location.origin}/agenda.html?empresa=${slug}`;
+  navigator.clipboard.writeText(link).then(() => {
+    const btn = document.getElementById('btnCopiarLink');
+    btn.innerHTML = '<i class="bi bi-check-lg"></i> Link copiado!';
+    setTimeout(() => {
+      btn.innerHTML = '<i class="bi bi-link-45deg"></i> Copiar link da agenda';
+    }, 2000);
+  });
 });
 
 function authHeader() {
@@ -408,3 +431,124 @@ async function excluirDisponibilidade(id) {
 }
 
 carregarProfissionais();
+carregarBadgeNotificacoes();
+
+// ── Agendamentos ──────────────────────────────────────────────
+
+function formatarDataHora(iso) {
+  const d = new Date(iso);
+  return d.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
+
+function renderAgendamentoCard(a, comBotaoLido = false) {
+  const dataHora = formatarDataHora(a.data_hora_inicio);
+  return `
+    <div class="agendamento-card ${!a.lido ? 'agendamento-novo' : ''}" data-id="${a.id}">
+      <div class="agendamento-info">
+        <div class="agendamento-cliente">${escapeHtml(a.nome_cliente)}</div>
+        <div class="agendamento-detalhe">
+          <i class="bi bi-person-badge"></i> ${escapeHtml(a.nome_profissional)}
+          &nbsp;·&nbsp;
+          <i class="bi bi-calendar3"></i> ${dataHora}
+        </div>
+        <div class="agendamento-contato">
+          <i class="bi bi-whatsapp"></i> ${escapeHtml(a.cliente_whatsapp)}
+        </div>
+      </div>
+      <div class="agendamento-acoes">
+        ${!a.lido ? `<span class="badge-novo">Novo</span>` : ''}
+        ${comBotaoLido && !a.lido ? `<button class="btn-icon btn-marcar-lido" title="Marcar como lido" data-id="${a.id}"><i class="bi bi-check-lg"></i></button>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+async function carregarAgendamentos() {
+  try {
+    const res = await fetch(`${API}/agendamentos`, { headers: authHeader() });
+    if (res.status === 401) { window.location.href = 'login.html'; return; }
+    const data = await res.json();
+    const lista = data.agendamentos || [];
+
+    const el = document.getElementById('listaAgendamentos');
+    const empty = document.getElementById('emptyAgendamentos');
+
+    if (!lista.length) {
+      el.innerHTML = '';
+      empty.classList.remove('d-none');
+      return;
+    }
+
+    empty.classList.add('d-none');
+    el.innerHTML = lista.map(a => renderAgendamentoCard(a, false)).join('');
+  } catch {
+    mostrarAlerta('alertaAgendamentos', 'Não foi possível carregar os agendamentos.');
+  }
+}
+
+// ── Notificações ──────────────────────────────────────────────
+
+async function carregarBadgeNotificacoes() {
+  try {
+    const res = await fetch(`${API}/agendamentos`, { headers: authHeader() });
+    if (!res.ok) return;
+    const data = await res.json();
+    const naoLidos = (data.agendamentos || []).filter(a => !a.lido).length;
+    atualizarBadge(naoLidos);
+  } catch { /* silencioso */ }
+}
+
+function atualizarBadge(count) {
+  const badge = document.getElementById('badgeNotif');
+  if (count > 0) {
+    badge.textContent = count > 99 ? '99+' : count;
+    badge.classList.remove('d-none');
+  } else {
+    badge.classList.add('d-none');
+  }
+}
+
+async function carregarNotificacoes() {
+  try {
+    const res = await fetch(`${API}/agendamentos`, { headers: authHeader() });
+    if (res.status === 401) { window.location.href = 'login.html'; return; }
+    const data = await res.json();
+    const naoLidos = (data.agendamentos || []).filter(a => !a.lido);
+
+    const el = document.getElementById('listaNotificacoes');
+    const empty = document.getElementById('emptyNotificacoes');
+
+    if (!naoLidos.length) {
+      el.innerHTML = '';
+      empty.classList.remove('d-none');
+      atualizarBadge(0);
+      return;
+    }
+
+    empty.classList.add('d-none');
+    el.innerHTML = naoLidos.map(a => renderAgendamentoCard(a, true)).join('');
+
+    el.querySelectorAll('.btn-marcar-lido').forEach(btn => {
+      btn.addEventListener('click', () => marcarLido(btn.dataset.id));
+    });
+  } catch {
+    mostrarAlerta('alertaNotificacoes', 'Não foi possível carregar as notificações.');
+  }
+}
+
+async function marcarLido(id) {
+  try {
+    const res = await fetch(`${API}/agendamentos/${id}/lido`, {
+      method: 'PATCH',
+      headers: authHeader(),
+    });
+    if (!res.ok) return;
+    await carregarNotificacoes();
+    carregarBadgeNotificacoes();
+  } catch { /* silencioso */ }
+}
+
+document.getElementById('btnMarcarTodosLidos').addEventListener('click', async () => {
+  const cards = document.querySelectorAll('#listaNotificacoes .btn-marcar-lido');
+  await Promise.all([...cards].map(btn => marcarLido(btn.dataset.id)));
+});

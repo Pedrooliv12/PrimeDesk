@@ -41,7 +41,7 @@ form.addEventListener('submit', async (e) => {
     localStorage.setItem('token', data.token);
     localStorage.setItem('empresa', JSON.stringify(data.empresa));
 
-    mostrarAlerta('Login realizado! Redirecionando...', 'sucesso');
+    mostrarAlerta('Login realizado!', 'sucesso');
     setTimeout(() => { window.location.href = 'dashboard.html'; }, 1200);
 
   } catch {

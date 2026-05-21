@@ -24,6 +24,13 @@
       <a href="#" class="nav-item" data-view="horarios">
         <i class="bi bi-clock"></i> Horários
       </a>
+      <a href="#" class="nav-item" data-view="agendamentos">
+        <i class="bi bi-calendar-check"></i> Agendamentos
+      </a>
+      <a href="#" class="nav-item" data-view="notificacoes">
+        <i class="bi bi-bell"></i> Notificações
+        <span class="badge-notif d-none" id="badgeNotif"></span>
+      </a>
     </nav>
 
     <div class="sidebar-footer">
@@ -31,6 +38,9 @@
         <i class="bi bi-building"></i>
         <span id="nomeEmpresa">Carregando...</span>
       </div>
+      <button class="btn-copiar-link" id="btnCopiarLink">
+        <i class="bi bi-link-45deg"></i> Copiar link da agenda
+      </button>
       <button class="btn-sair" id="btnSair">
         <i class="bi bi-box-arrow-right"></i> Sair
       </button>
@@ -94,6 +104,49 @@
         <i class="bi bi-calendar-week" style="font-size: 2.5rem; color: #4f545c;"></i>
         <h4>Selecione um profissional</h4>
         <p>Escolha um profissional acima para configurar a disponibilidade semanal dele.</p>
+      </div>
+    </div>
+
+    <!-- View: Agendamentos -->
+    <div id="viewAgendamentos" class="d-none">
+      <div class="content-header">
+        <div>
+          <h2>Agendamentos</h2>
+          <p class="content-subtitle">Histórico completo de agendamentos dos seus clientes</p>
+        </div>
+      </div>
+
+      <div id="alertaAgendamentos" class="alerta d-none"></div>
+
+      <div id="listaAgendamentos" class="agendamentos-lista"></div>
+
+      <div id="emptyAgendamentos" class="empty-state d-none">
+        <i class="bi bi-calendar-x" style="font-size: 2.5rem; color: #4f545c;"></i>
+        <h4>Nenhum agendamento ainda</h4>
+        <p>Quando seus clientes agendarem horários, eles aparecerão aqui.</p>
+      </div>
+    </div>
+
+    <!-- View: Notificações -->
+    <div id="viewNotificacoes" class="d-none">
+      <div class="content-header">
+        <div>
+          <h2>Notificações</h2>
+          <p class="content-subtitle">Novos agendamentos não lidos</p>
+        </div>
+        <button class="btn-create" id="btnMarcarTodosLidos">
+          <i class="bi bi-check-all"></i> Marcar todos como lidos
+        </button>
+      </div>
+
+      <div id="alertaNotificacoes" class="alerta d-none"></div>
+
+      <div id="listaNotificacoes" class="agendamentos-lista"></div>
+
+      <div id="emptyNotificacoes" class="empty-state d-none">
+        <i class="bi bi-bell-slash" style="font-size: 2.5rem; color: #4f545c;"></i>
+        <h4>Tudo em dia!</h4>
+        <p>Nenhuma notificação não lida.</p>
       </div>
     </div>
 

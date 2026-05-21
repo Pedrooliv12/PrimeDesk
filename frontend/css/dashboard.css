@@ -101,6 +101,29 @@ body {
   white-space: nowrap;
 }
 
+.btn-copiar-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  background: rgba(0, 153, 255, 0.08);
+  border: 1px solid rgba(0, 153, 255, 0.2);
+  color: var(--pallet-blue);
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  margin-bottom: 4px;
+}
+
+.btn-copiar-link:hover {
+  background: rgba(0, 153, 255, 0.15);
+  border-color: rgba(0, 153, 255, 0.4);
+}
+
 .btn-sair {
   display: flex;
   align-items: center;
@@ -485,6 +508,83 @@ select.form-control option {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
+}
+
+/* ── Badge de notificações ── */
+.badge-notif {
+  margin-left: auto;
+  background: #ff6b6b;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 800;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 99px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+}
+
+/* ── Cards de agendamento ── */
+.agendamentos-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.agendamento-card {
+  background: var(--card-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: border-color 0.2s;
+}
+
+.agendamento-card:hover { border-color: var(--pallet-blue); }
+
+.agendamento-novo {
+  border-left: 3px solid var(--pallet-blue);
+}
+
+.agendamento-info { flex: 1; min-width: 0; }
+
+.agendamento-cliente {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 6px;
+}
+
+.agendamento-detalhe,
+.agendamento-contato {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 3px;
+}
+
+.agendamento-detalhe i,
+.agendamento-contato i { margin-right: 2px; }
+
+.agendamento-acoes {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.badge-novo {
+  font-size: 0.72rem;
+  font-weight: 800;
+  background: rgba(0, 153, 255, 0.12);
+  border: 1px solid rgba(0, 153, 255, 0.3);
+  color: var(--pallet-blue);
+  padding: 3px 10px;
+  border-radius: 99px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 /* ── Grid de horários (legado) ── */
