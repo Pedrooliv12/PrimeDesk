@@ -8,6 +8,14 @@ async function cadastroProfissional(req, res) {
         return res.status(400).json({ erro: 'nome_profissional e especialidade são obrigatórios.' });
     }
 
+    if (nome_profissional.length > 100) {
+        return res.status(400).json({ erro: 'O nome do profissional deve ter no máximo 100 caracteres.' });
+    }
+
+    if (especialidade.length > 100) {
+        return res.status(400).json({ erro: 'A especialidade deve ter no máximo 100 caracteres.' });
+    }
+
     const profissionalCadastrado = await pool.query(
         `INSERT INTO profissionais (id_empresa, nome_profissional, especialidade)
          VALUES ($1, $2, $3)
@@ -37,6 +45,14 @@ async function editarProfissional(req, res) {
 
     if (!nome_profissional || !especialidade) {
         return res.status(400).json({ erro: 'nome_profissional e especialidade são obrigatórios.' });
+    }
+
+    if (nome_profissional.length > 100) {
+        return res.status(400).json({ erro: 'O nome do profissional deve ter no máximo 100 caracteres.' });
+    }
+
+    if (especialidade.length > 100) {
+        return res.status(400).json({ erro: 'A especialidade deve ter no máximo 100 caracteres.' });
     }
 
     const profissionalEditado = await pool.query(

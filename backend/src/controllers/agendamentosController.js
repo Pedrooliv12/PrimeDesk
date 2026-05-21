@@ -7,6 +7,14 @@ async function criarAgendamento(req, res) {
     return res.status(400).json({ erro: 'id_horario, nome_cliente e cliente_whatsapp são obrigatórios.' });
   }
 
+  if (nome_cliente.length > 100) {
+    return res.status(400).json({ erro: 'O nome do cliente deve ter no máximo 100 caracteres.' });
+  }
+
+  if (cliente_whatsapp.length > 15) {
+    return res.status(400).json({ erro: 'O WhatsApp deve ter no máximo 15 caracteres.' });
+  }
+
   const client = await pool.connect();
   try {
     await client.query('BEGIN');

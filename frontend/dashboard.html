@@ -165,10 +165,10 @@
       <form id="formProfissional" novalidate>
         <input type="hidden" id="profissionalId" />
         <label class="form-label">Nome</label>
-        <input type="text" id="nomeProfissional" class="form-control" placeholder="Ex: Dr. João Silva" required />
+        <input type="text" id="nomeProfissional" class="form-control" placeholder="Ex: Dr. João Silva" maxlength="100" required />
 
         <label class="form-label mt-3">Especialidade</label>
-        <input type="text" id="especialidade" class="form-control" placeholder="Ex: Cardiologia" required />
+        <input type="text" id="especialidade" class="form-control" placeholder="Ex: Cardiologia" maxlength="100" required />
 
         <button type="submit" class="btn-create w-100 mt-4" id="btnSalvarProfissional">
           Salvar

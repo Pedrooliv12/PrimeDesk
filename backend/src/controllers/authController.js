@@ -16,8 +16,16 @@ async function cadastroEmpresa(req, res) {
     return res.status(400).json({ erro: 'nome_empresa, email_empresa e senha_empresa são obrigatórios.' });
   }
 
+  if (nome_empresa.length > 150) {
+    return res.status(400).json({ erro: 'O nome da empresa deve ter no máximo 150 caracteres.' });
+  }
+
   if (!/^[a-zA-Z0-9 ]+$/.test(nome_empresa)) {
     return res.status(400).json({ erro: 'O nome da empresa só pode conter letras, números e espaços.' });
+  }
+
+  if (email_empresa.length > 255) {
+    return res.status(400).json({ erro: 'O e-mail deve ter no máximo 255 caracteres.' });
   }
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -27,6 +35,10 @@ async function cadastroEmpresa(req, res) {
 
   if (senha_empresa.length < 6) {
     return res.status(400).json({ erro: 'A senha deve ter pelo menos 6 caracteres.' });
+  }
+
+  if (senha_empresa.length > 72) {
+    return res.status(400).json({ erro: 'A senha deve ter no máximo 72 caracteres.' });
   }
 
   const emailExistente = await pool.query(
