@@ -5,7 +5,8 @@ CREATE TABLE IF NOT EXISTS "empresas" (
   "id" SERIAL PRIMARY KEY,
   "nome_empresa" varchar(150),
   "email_empresa" varchar(255) UNIQUE,
-  "senha_empresa" varchar(255)
+  "senha_empresa" varchar(255),
+  "slug" varchar(100) UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS "profissionais" (
@@ -29,4 +30,14 @@ CREATE TABLE IF NOT EXISTS "disponibilidades_horarias" (
   "hora_inicio" time NOT NULL,
   "hora_fim" time NOT NULL,
   CHECK ("hora_inicio" < "hora_fim")
+);
+
+CREATE TABLE IF NOT EXISTS "agendamentos" (
+  "id" SERIAL PRIMARY KEY,
+  "id_horario" integer REFERENCES "horarios_disponiveis" ("id") ON DELETE CASCADE,
+  "nome_cliente" varchar(100),
+  "cliente_whatsapp" varchar(15),
+  "confirmado" boolean DEFAULT false,
+  "lido" boolean DEFAULT false,
+  "criado_em" timestamp DEFAULT CURRENT_TIMESTAMP
 );

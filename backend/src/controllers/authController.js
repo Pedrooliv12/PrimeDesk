@@ -2,12 +2,22 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const pool = require('../db');
 
+function gerarSlug(nomeEmpresa) {
+  const base = nomeEmpresa.trim().toLowerCase().replace(/\s+/g, '-').slice(0, 40);
+  const sufixo = Math.random().toString(36).slice(2, 6);
+  return `${base}-${sufixo}`;
+}
+
 async function cadastroEmpresa(req, res) {
   const { nome_empresa, senha_empresa } = req.body;
   const email_empresa = req.body.email_empresa?.toLowerCase().trim();
 
   if (!nome_empresa || !email_empresa || !senha_empresa) {
     return res.status(400).json({ erro: 'nome_empresa, email_empresa e senha_empresa são obrigatórios.' });
+  }
+
+  if (!/^[a-zA-Z0-9 ]+$/.test(nome_empresa)) {
+    return res.status(400).json({ erro: 'O nome da empresa só pode conter letras, números e espaços.' });
   }
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -28,12 +38,13 @@ async function cadastroEmpresa(req, res) {
   }
 
   const senhaHash = await bcrypt.hash(senha_empresa, 10);
+  const slug = gerarSlug(nome_empresa);
 
   const empresaCadastrada = await pool.query(
-    `INSERT INTO empresas (nome_empresa, email_empresa, senha_empresa)
-     VALUES ($1, $2, $3)
-     RETURNING id, nome_empresa, email_empresa`,
-    [nome_empresa, email_empresa, senhaHash]
+    `INSERT INTO empresas (nome_empresa, email_empresa, senha_empresa, slug)
+     VALUES ($1, $2, $3, $4)
+     RETURNING id, nome_empresa, email_empresa, slug`,
+    [nome_empresa, email_empresa, senhaHash, slug]
   );
 
   return res.status(201).json({ empresa: empresaCadastrada.rows[0] });
@@ -48,7 +59,7 @@ async function loginEmpresa(req, res) {
   }
 
   const empresaBuscada = await pool.query(
-    'SELECT * FROM empresas WHERE email_empresa = $1',
+    'SELECT id, nome_empresa, email_empresa, senha_empresa, slug FROM empresas WHERE email_empresa = $1',
     [email_empresa]
   );
 
@@ -75,6 +86,7 @@ async function loginEmpresa(req, res) {
       id: empresa.id,
       nome_empresa: empresa.nome_empresa,
       email_empresa: empresa.email_empresa,
+      slug: empresa.slug,
     },
   });
 }

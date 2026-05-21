@@ -5,6 +5,8 @@ const authRoutes = require('./routes/auth');
 const profissionaisRoutes = require('./routes/profissionais');
 const horariosRoutes = require('./routes/horarios');
 const disponibilidadesRoutes = require('./routes/disponibilidades');
+const agendaRoutes = require('./routes/agenda');
+const agendamentosRoutes = require('./routes/agendamentos');
 
 const app = express();
 
@@ -22,5 +24,7 @@ app.use('/auth', authRoutes);
 app.use('/profissionais', profissionaisRoutes);
 app.use('/horarios', horariosRoutes);
 app.use('/disponibilidades', disponibilidadesRoutes);
+app.use('/agenda', agendaRoutes);
+app.use('/agendamentos', agendamentosRoutes);
 
 module.exports = app;
