@@ -20,11 +20,20 @@ function ocultarAlerta() {
   alerta.className = 'alerta d-none';
 }
 
+document.getElementById('nome_empresa').addEventListener('input', (e) => {
+  e.target.value = e.target.value.replace(/[^a-zA-Z0-9 ]/g, '');
+});
+
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   ocultarAlerta();
 
   const nome_empresa = document.getElementById('nome_empresa').value.trim();
+
+  if (!/^[a-zA-Z0-9 ]+$/.test(nome_empresa)) {
+    mostrarAlerta('O nome da empresa só pode conter letras, números e espaços.');
+    return;
+  }
   const email_empresa = document.getElementById('email_empresa').value.trim().toLowerCase();
   const senha_empresa = inputSenha.value;
 
