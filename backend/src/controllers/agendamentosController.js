@@ -20,13 +20,18 @@ async function criarAgendamento(req, res) {
     await client.query('BEGIN');
 
     const horario = await client.query(
-      `SELECT id, status FROM horarios_disponiveis WHERE id = $1 FOR UPDATE`,
+      `SELECT id, status, data_hora_inicio FROM horarios_disponiveis WHERE id = $1 FOR UPDATE`,
       [id_horario]
     );
 
     if (horario.rows.length === 0) {
       await client.query('ROLLBACK');
       return res.status(404).json({ erro: 'Horário não encontrado.' });
+    }
+
+    if (new Date(horario.rows[0].data_hora_inicio) <= new Date()) {
+      await client.query('ROLLBACK');
+      return res.status(409).json({ erro: 'Este horário já passou.' });
     }
 
     if (horario.rows[0].status !== 'disponivel') {

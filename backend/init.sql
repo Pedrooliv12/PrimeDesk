@@ -20,7 +20,8 @@ CREATE TABLE IF NOT EXISTS "horarios_disponiveis" (
   "id" SERIAL PRIMARY KEY,
   "id_profissional" integer REFERENCES "profissionais" ("id") ON DELETE CASCADE,
   "data_hora_inicio" timestamp NOT NULL,
-  "status" varchar(20) DEFAULT 'disponivel'
+  "status" varchar(20) DEFAULT 'disponivel',
+  UNIQUE ("id_profissional", "data_hora_inicio")
 );
 
 CREATE TABLE IF NOT EXISTS "disponibilidades_horarias" (

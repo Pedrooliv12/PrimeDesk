@@ -115,7 +115,7 @@ async function listarAgendaPublica(req, res) {
     const novoHorarios = await pool.query(
       `INSERT INTO horarios_disponiveis (id_profissional, data_hora_inicio)
        VALUES ${values}
-       ON CONFLICT DO NOTHING
+       ON CONFLICT (id_profissional, data_hora_inicio) DO NOTHING
        RETURNING id, id_profissional, data_hora_inicio, status`,
       params
     );
