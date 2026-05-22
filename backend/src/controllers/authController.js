@@ -2,18 +2,30 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const pool = require('../db');
 
+const PERGUNTAS_SEGURANCA = {
+  ano_fundacao: 'Em que ano a empresa foi fundada?',
+  cidade_sede: 'Em qual cidade fica a sede da empresa?',
+  primeiro_cliente: 'Qual o nome do primeiro cliente da empresa?',
+  primeiro_funcionario: 'Qual o nome do primeiro funcionário contratado?',
+  cnpj_final: 'Quais são os 4 últimos dígitos do CNPJ da empresa?',
+};
+
 function gerarSlug(nomeEmpresa) {
   const base = nomeEmpresa.trim().toLowerCase().replace(/\s+/g, '-').slice(0, 40);
   const sufixo = Math.random().toString(36).slice(2, 6);
   return `${base}-${sufixo}`;
 }
 
+function normalizarResposta(resposta) {
+  return resposta.trim().toLowerCase();
+}
+
 async function cadastroEmpresa(req, res) {
-  const { nome_empresa, senha_empresa } = req.body;
+  const { nome_empresa, senha_empresa, pergunta_seguranca, resposta_seguranca } = req.body;
   const email_empresa = req.body.email_empresa?.toLowerCase().trim();
 
-  if (!nome_empresa || !email_empresa || !senha_empresa) {
-    return res.status(400).json({ erro: 'nome_empresa, email_empresa e senha_empresa são obrigatórios.' });
+  if (!nome_empresa || !email_empresa || !senha_empresa || !pergunta_seguranca || !resposta_seguranca) {
+    return res.status(400).json({ erro: 'Todos os campos são obrigatórios.' });
   }
 
   if (nome_empresa.length > 150) {
@@ -41,6 +53,15 @@ async function cadastroEmpresa(req, res) {
     return res.status(400).json({ erro: 'A senha deve ter no máximo 72 caracteres.' });
   }
 
+  if (!PERGUNTAS_SEGURANCA[pergunta_seguranca]) {
+    return res.status(400).json({ erro: 'Pergunta de segurança inválida.' });
+  }
+
+  const respostaNormalizada = normalizarResposta(resposta_seguranca);
+  if (respostaNormalizada.length < 2 || respostaNormalizada.length > 100) {
+    return res.status(400).json({ erro: 'A resposta deve ter entre 2 e 100 caracteres.' });
+  }
+
   const emailExistente = await pool.query(
     'SELECT id FROM empresas WHERE email_empresa = $1',
     [email_empresa]
@@ -50,13 +71,14 @@ async function cadastroEmpresa(req, res) {
   }
 
   const senhaHash = await bcrypt.hash(senha_empresa, 10);
+  const respostaHash = await bcrypt.hash(respostaNormalizada, 10);
   const slug = gerarSlug(nome_empresa);
 
   const empresaCadastrada = await pool.query(
-    `INSERT INTO empresas (nome_empresa, email_empresa, senha_empresa, slug)
-     VALUES ($1, $2, $3, $4)
+    `INSERT INTO empresas (nome_empresa, email_empresa, senha_empresa, slug, pergunta_seguranca, resposta_seguranca)
+     VALUES ($1, $2, $3, $4, $5, $6)
      RETURNING id, nome_empresa, email_empresa, slug`,
-    [nome_empresa, email_empresa, senhaHash, slug]
+    [nome_empresa, email_empresa, senhaHash, slug, pergunta_seguranca, respostaHash]
   );
 
   return res.status(201).json({ empresa: empresaCadastrada.rows[0] });
@@ -103,4 +125,78 @@ async function loginEmpresa(req, res) {
   });
 }
 
-module.exports = { cadastroEmpresa, loginEmpresa };
+function listarPerguntas(req, res) {
+  const lista = Object.entries(PERGUNTAS_SEGURANCA).map(([chave, pergunta]) => ({ chave, pergunta }));
+  return res.json({ perguntas: lista });
+}
+
+async function obterPerguntaSeguranca(req, res) {
+  const email_empresa = req.body.email_empresa?.toLowerCase().trim();
+
+  if (!email_empresa) {
+    return res.status(400).json({ erro: 'E-mail é obrigatório.' });
+  }
+
+  const resultado = await pool.query(
+    'SELECT pergunta_seguranca FROM empresas WHERE email_empresa = $1',
+    [email_empresa]
+  );
+
+  const empresa = resultado.rows[0];
+  if (!empresa || !empresa.pergunta_seguranca) {
+    return res.status(404).json({ erro: 'E-mail não encontrado ou sem pergunta de segurança cadastrada.' });
+  }
+
+  return res.json({
+    chave: empresa.pergunta_seguranca,
+    pergunta: PERGUNTAS_SEGURANCA[empresa.pergunta_seguranca],
+  });
+}
+
+async function redefinirSenha(req, res) {
+  const { resposta_seguranca, nova_senha } = req.body;
+  const email_empresa = req.body.email_empresa?.toLowerCase().trim();
+
+  if (!email_empresa || !resposta_seguranca || !nova_senha) {
+    return res.status(400).json({ erro: 'Todos os campos são obrigatórios.' });
+  }
+
+  if (nova_senha.length < 6 || nova_senha.length > 72) {
+    return res.status(400).json({ erro: 'A nova senha deve ter entre 6 e 72 caracteres.' });
+  }
+
+  const resultado = await pool.query(
+    'SELECT id, resposta_seguranca FROM empresas WHERE email_empresa = $1',
+    [email_empresa]
+  );
+
+  const empresa = resultado.rows[0];
+  if (!empresa || !empresa.resposta_seguranca) {
+    return res.status(404).json({ erro: 'E-mail não encontrado.' });
+  }
+
+  const respostaCorreta = await bcrypt.compare(
+    normalizarResposta(resposta_seguranca),
+    empresa.resposta_seguranca
+  );
+
+  if (!respostaCorreta) {
+    return res.status(401).json({ erro: 'Resposta incorreta.' });
+  }
+
+  const novaSenhaHash = await bcrypt.hash(nova_senha, 10);
+  await pool.query(
+    'UPDATE empresas SET senha_empresa = $1 WHERE id = $2',
+    [novaSenhaHash, empresa.id]
+  );
+
+  return res.json({ mensagem: 'Senha redefinida com sucesso.' });
+}
+
+module.exports = {
+  cadastroEmpresa,
+  loginEmpresa,
+  listarPerguntas,
+  obterPerguntaSeguranca,
+  redefinirSenha,
+};

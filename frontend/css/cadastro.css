@@ -95,6 +95,16 @@ body {
 
 .form-control::placeholder { color: #72767d; }
 
+select.form-control {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%2372767d' d='M6 8L0 0h12z'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 18px center !important;
+  padding-right: 44px !important;
+}
+
+select.form-control option { background: #23272a; color: white; }
+
 .form-control:focus {
   border-color: var(--pallet-blue) !important;
   box-shadow: 0 0 0 4px rgba(0, 153, 255, 0.1) !important;

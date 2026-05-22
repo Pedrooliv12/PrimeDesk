@@ -6,7 +6,9 @@ CREATE TABLE IF NOT EXISTS "empresas" (
   "nome_empresa" varchar(150),
   "email_empresa" varchar(255) UNIQUE,
   "senha_empresa" varchar(255),
-  "slug" varchar(100) UNIQUE
+  "slug" varchar(100) UNIQUE,
+  "pergunta_seguranca" varchar(50),
+  "resposta_seguranca" varchar(255)
 );
 
 CREATE TABLE IF NOT EXISTS "profissionais" (
