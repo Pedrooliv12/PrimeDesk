@@ -40,17 +40,31 @@ document.getElementById('btnSair').addEventListener('click', () => {
   window.location.href = 'login.html';
 });
 
-document.getElementById('btnCopiarLink').addEventListener('click', () => {
+async function copiarTexto(texto) {
+  if (navigator.clipboard && window.isSecureContext) {
+    await navigator.clipboard.writeText(texto);
+    return;
+  }
+  const ta = document.createElement('textarea');
+  ta.value = texto;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+
+document.getElementById('btnCopiarLink').addEventListener('click', async () => {
   const slug = empresa?.slug;
   if (!slug) return;
   const link = `${window.location.origin}/agenda.html?empresa=${slug}`;
-  navigator.clipboard.writeText(link).then(() => {
-    const btn = document.getElementById('btnCopiarLink');
-    btn.innerHTML = '<i class="bi bi-check-lg"></i> Link copiado!';
-    setTimeout(() => {
-      btn.innerHTML = '<i class="bi bi-link-45deg"></i> Copiar link da agenda';
-    }, 2000);
-  });
+  await copiarTexto(link);
+  const btn = document.getElementById('btnCopiarLink');
+  btn.innerHTML = '<i class="bi bi-check-lg"></i> Link copiado!';
+  setTimeout(() => {
+    btn.innerHTML = '<i class="bi bi-link-45deg"></i> Copiar link da agenda';
+  }, 2000);
 });
 
 function getFocusable(container) {
