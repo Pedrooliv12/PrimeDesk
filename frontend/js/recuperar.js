@@ -11,8 +11,12 @@ const inputNovaSenha = document.getElementById('nova_senha');
 
 let emailEmpresa = '';
 
-document.getElementById('toggleSenha').addEventListener('click', () => {
-  inputNovaSenha.type = inputNovaSenha.type === 'text' ? 'password' : 'text';
+const toggleSenha = document.getElementById('toggleSenha');
+toggleSenha.addEventListener('click', () => {
+  const visivel = inputNovaSenha.type === 'text';
+  inputNovaSenha.type = visivel ? 'password' : 'text';
+  toggleSenha.setAttribute('aria-pressed', String(!visivel));
+  toggleSenha.setAttribute('aria-label', visivel ? 'Mostrar senha' : 'Ocultar senha');
 });
 
 function mostrarAlerta(el, mensagem, tipo = 'erro') {
@@ -49,6 +53,7 @@ formEmail.addEventListener('submit', async (e) => {
     perguntaTexto.textContent = data.pergunta;
     formEmail.classList.add('d-none');
     formRedefinir.classList.remove('d-none');
+    document.getElementById('resposta_seguranca').focus();
   } catch {
     mostrarAlerta(alertaEmail, 'Não foi possível conectar ao servidor.');
   } finally {
