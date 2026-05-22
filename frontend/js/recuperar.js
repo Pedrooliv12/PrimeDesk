@@ -1,5 +1,4 @@
-const API = 'http://localhost:3000';
-
+﻿
 const formEmail = document.getElementById('formEmail');
 const formRedefinir = document.getElementById('formRedefinir');
 const alertaEmail = document.getElementById('alertaEmail');
@@ -37,7 +36,7 @@ formEmail.addEventListener('submit', async (e) => {
   btnEmail.textContent = 'Buscando...';
 
   try {
-    const res = await fetch(`${API}/auth/recuperar/pergunta`, {
+    const res = await fetch(`/auth/recuperar/pergunta`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email_empresa: email }),
@@ -55,7 +54,7 @@ formEmail.addEventListener('submit', async (e) => {
     formRedefinir.classList.remove('d-none');
     document.getElementById('resposta_seguranca').focus();
   } catch {
-    mostrarAlerta(alertaEmail, 'Não foi possível conectar ao servidor.');
+    mostrarAlerta(alertaEmail, 'NÃ£o foi possÃ­vel conectar ao servidor.');
   } finally {
     btnEmail.disabled = false;
     btnEmail.textContent = 'Continuar';
@@ -82,7 +81,7 @@ formRedefinir.addEventListener('submit', async (e) => {
   btnRedefinir.textContent = 'Redefinindo...';
 
   try {
-    const res = await fetch(`${API}/auth/recuperar/redefinir`, {
+    const res = await fetch(`/auth/recuperar/redefinir`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -101,7 +100,7 @@ formRedefinir.addEventListener('submit', async (e) => {
     mostrarAlerta(alertaRedefinir, 'Senha redefinida! Redirecionando...', 'sucesso');
     setTimeout(() => { window.location.href = 'login.html'; }, 1500);
   } catch {
-    mostrarAlerta(alertaRedefinir, 'Não foi possível conectar ao servidor.');
+    mostrarAlerta(alertaRedefinir, 'NÃ£o foi possÃ­vel conectar ao servidor.');
   } finally {
     btnRedefinir.disabled = false;
     btnRedefinir.textContent = 'Redefinir senha';

@@ -1,5 +1,3 @@
-const API = 'http://localhost:3000';
-
 const form = document.getElementById('formCadastro');
 const alerta = document.getElementById('alerta');
 const btnSubmit = document.getElementById('btnSubmit');
@@ -23,7 +21,7 @@ function ocultarAlerta() {
 
 async function carregarPerguntas() {
   try {
-    const res = await fetch(`${API}/auth/perguntas`);
+    const res = await fetch('/auth/perguntas');
     const data = await res.json();
     for (const { chave, pergunta } of data.perguntas) {
       const opt = document.createElement('option');
@@ -70,7 +68,7 @@ form.addEventListener('submit', async (e) => {
   btnSubmit.textContent = 'Criando conta...';
 
   try {
-    const res = await fetch(`${API}/auth/register`, {
+    const res = await fetch('/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

@@ -1,5 +1,3 @@
-const API = 'http://localhost:3000';
-
 const form = document.getElementById('formLogin');
 const alerta = document.getElementById('alerta');
 const btnSubmit = document.getElementById('btnSubmit');
@@ -25,7 +23,7 @@ form.addEventListener('submit', async (e) => {
   btnSubmit.textContent = 'Entrando...';
 
   try {
-    const res = await fetch(`${API}/auth/login`, {
+    const res = await fetch('/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email_empresa, senha_empresa }),

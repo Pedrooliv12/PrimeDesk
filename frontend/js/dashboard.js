@@ -1,5 +1,4 @@
-const API = 'http://localhost:3000';
-const token = localStorage.getItem('token');
+﻿const token = localStorage.getItem('token');
 const empresa = JSON.parse(localStorage.getItem('empresa') || 'null');
 
 if (!token || !empresa) {
@@ -106,13 +105,13 @@ let profissionaisCached = null;
 
 async function carregarProfissionais() {
   try {
-    const res = await fetch(`${API}/profissionais`, { headers: authHeader() });
+    const res = await fetch(`/profissionais`, { headers: authHeader() });
     if (res.status === 401) { window.location.href = 'login.html'; return; }
     const data = await res.json();
     profissionaisCached = data.profissionais || [];
     renderProfissionais(profissionaisCached);
   } catch {
-    mostrarAlerta('alertaProfissional', 'Não foi possível carregar os profissionais.');
+    mostrarAlerta('alertaProfissional', 'NÃ£o foi possÃ­vel carregar os profissionais.');
   }
 }
 
@@ -193,7 +192,7 @@ formProfissional.addEventListener('submit', async (e) => {
   setButtonLoading('btnSalvarProfissional', true);
 
   try {
-    const url = id ? `${API}/profissionais/${id}` : `${API}/profissionais`;
+    const url = id ? `/profissionais/${id}` : `/profissionais`;
     const method = id ? 'PUT' : 'POST';
 
     const res = await fetch(url, {
@@ -212,23 +211,23 @@ formProfissional.addEventListener('submit', async (e) => {
     fecharModal('modalProfissional', 'formProfissional');
     carregarProfissionais();
   } catch {
-    mostrarAlerta('alertaModalProfissional', 'Não foi possível conectar ao servidor.');
+    mostrarAlerta('alertaModalProfissional', 'NÃ£o foi possÃ­vel conectar ao servidor.');
   } finally {
     setButtonLoading('btnSalvarProfissional', false);
   }
 });
 
 async function excluirProfissional(id) {
-  if (!confirm('Excluir este profissional? Os horários vinculados também serão removidos.')) return;
+  if (!confirm('Excluir este profissional? Os horÃ¡rios vinculados tambÃ©m serÃ£o removidos.')) return;
   try {
-    const res = await fetch(`${API}/profissionais/${id}`, {
+    const res = await fetch(`/profissionais/${id}`, {
       method: 'DELETE',
       headers: authHeader(),
     });
     if (res.ok) carregarProfissionais();
     else mostrarAlerta('alertaProfissional', 'Erro ao excluir profissional.');
   } catch {
-    mostrarAlerta('alertaProfissional', 'Não foi possível conectar ao servidor.');
+    mostrarAlerta('alertaProfissional', 'NÃ£o foi possÃ­vel conectar ao servidor.');
   }
 }
 
@@ -239,7 +238,7 @@ const DIAS_SEMANA = [
   { idx: 3, label: 'Qua' },
   { idx: 4, label: 'Qui' },
   { idx: 5, label: 'Sex' },
-  { idx: 6, label: 'Sáb' },
+  { idx: 6, label: 'SÃ¡b' },
 ];
 
 let profissionalSelecionadoId = null;
@@ -262,13 +261,13 @@ async function inicializarDisponibilidades() {
       select.appendChild(option);
     });
   } catch {
-    mostrarAlerta('alertaHorario', 'Não foi possível carregar os profissionais.');
+    mostrarAlerta('alertaHorario', 'NÃ£o foi possÃ­vel carregar os profissionais.');
   }
 }
 
 async function carregarProfissionalsList() {
   if (profissionaisCached) return profissionaisCached;
-  const res = await fetch(`${API}/profissionais`, { headers: authHeader() });
+  const res = await fetch(`/profissionais`, { headers: authHeader() });
   if (res.status === 401) { window.location.href = 'login.html'; return null; }
   const data = await res.json();
   return (profissionaisCached = data.profissionais || []);
@@ -297,14 +296,14 @@ async function carregarDisponibilidades() {
 
   try {
     const res = await fetch(
-      `${API}/disponibilidades?id_profissional=${profissionalSelecionadoId}`,
+      `/disponibilidades?id_profissional=${profissionalSelecionadoId}`,
       { headers: authHeader() }
     );
     if (res.status === 401) { window.location.href = 'login.html'; return; }
     const data = await res.json();
     renderSemana(data.disponibilidades || []);
   } catch {
-    mostrarAlerta('alertaHorario', 'Não foi possível carregar as disponibilidades.');
+    mostrarAlerta('alertaHorario', 'NÃ£o foi possÃ­vel carregar as disponibilidades.');
   }
 }
 
@@ -330,7 +329,7 @@ function renderSemana(disponibilidades) {
             </div>
           `;
         }).join('')
-      : '<div class="dia-vazio">Sem horários</div>';
+      : '<div class="dia-vazio">Sem horÃ¡rios</div>';
 
     return `
       <div class="dia-card">
@@ -364,7 +363,7 @@ document.getElementById('semanaGrid').addEventListener('click', (e) => {
       return;
     }
     dispDiaSemana.value = btnAdd.dataset.diaIdx;
-    modalDispTitulo.textContent = `Adicionar horário — ${btnAdd.dataset.diaLabel}`;
+    modalDispTitulo.textContent = `Adicionar horÃ¡rio â€” ${btnAdd.dataset.diaLabel}`;
     abrirModal('modalDisponibilidade');
     ocultarAlerta('alertaModalDisp');
   }
@@ -389,12 +388,12 @@ formDisponibilidade.addEventListener('submit', async (e) => {
   const hora_fim = document.getElementById('dispHoraFim').value;
 
   if (!hora_inicio || !hora_fim) {
-    mostrarAlerta('alertaModalDisp', 'Preencha início e fim.', 'erro');
+    mostrarAlerta('alertaModalDisp', 'Preencha inÃ­cio e fim.', 'erro');
     return;
   }
 
   if (hora_inicio >= hora_fim) {
-    mostrarAlerta('alertaModalDisp', 'Hora de início deve ser menor que hora de fim.', 'erro');
+    mostrarAlerta('alertaModalDisp', 'Hora de inÃ­cio deve ser menor que hora de fim.', 'erro');
     return;
   }
 
@@ -403,7 +402,7 @@ formDisponibilidade.addEventListener('submit', async (e) => {
   setButtonLoading('btnSalvarDisp', true);
 
   try {
-    const res = await fetch(`${API}/disponibilidades`, {
+    const res = await fetch(`/disponibilidades`, {
       method: 'POST',
       headers: authHeader(),
       body: JSON.stringify({
@@ -424,23 +423,23 @@ formDisponibilidade.addEventListener('submit', async (e) => {
     fecharModal('modalDisponibilidade', 'formDisponibilidade');
     carregarDisponibilidades();
   } catch {
-    mostrarAlerta('alertaModalDisp', 'Não foi possível conectar ao servidor.', 'erro');
+    mostrarAlerta('alertaModalDisp', 'NÃ£o foi possÃ­vel conectar ao servidor.', 'erro');
   } finally {
     setButtonLoading('btnSalvarDisp', false);
   }
 });
 
 async function excluirDisponibilidade(id) {
-  if (!confirm('Remover este horário?')) return;
+  if (!confirm('Remover este horÃ¡rio?')) return;
   try {
-    const res = await fetch(`${API}/disponibilidades/${id}`, {
+    const res = await fetch(`/disponibilidades/${id}`, {
       method: 'DELETE',
       headers: authHeader(),
     });
     if (res.ok) carregarDisponibilidades();
-    else mostrarAlerta('alertaHorario', 'Erro ao remover horário.');
+    else mostrarAlerta('alertaHorario', 'Erro ao remover horÃ¡rio.');
   } catch {
-    mostrarAlerta('alertaHorario', 'Não foi possível conectar ao servidor.');
+    mostrarAlerta('alertaHorario', 'NÃ£o foi possÃ­vel conectar ao servidor.');
   }
 }
 
@@ -470,7 +469,7 @@ document.addEventListener('keydown', (e) => {
 carregarProfissionais();
 carregarBadgeNotificacoes();
 
-// ── Agendamentos ──────────────────────────────────────────────
+// â”€â”€ Agendamentos â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function formatarDataHora(iso) {
   const d = new Date(iso);
@@ -485,7 +484,7 @@ function renderAgendamentoCard(a, comBotaoLido = false) {
         <div class="agendamento-cliente">${escapeHtml(a.nome_cliente)}</div>
         <div class="agendamento-detalhe">
           <i class="bi bi-person-badge"></i> ${escapeHtml(a.nome_profissional)}
-          &nbsp;·&nbsp;
+          &nbsp;Â·&nbsp;
           <i class="bi bi-calendar3"></i> ${dataHora}
         </div>
         <div class="agendamento-contato">
@@ -502,7 +501,7 @@ function renderAgendamentoCard(a, comBotaoLido = false) {
 
 async function carregarAgendamentos() {
   try {
-    const res = await fetch(`${API}/agendamentos`, { headers: authHeader() });
+    const res = await fetch(`/agendamentos`, { headers: authHeader() });
     if (res.status === 401) { window.location.href = 'login.html'; return; }
     const data = await res.json();
     const lista = data.agendamentos || [];
@@ -519,15 +518,15 @@ async function carregarAgendamentos() {
     empty.classList.add('d-none');
     el.innerHTML = lista.map(a => renderAgendamentoCard(a, false)).join('');
   } catch {
-    mostrarAlerta('alertaAgendamentos', 'Não foi possível carregar os agendamentos.');
+    mostrarAlerta('alertaAgendamentos', 'NÃ£o foi possÃ­vel carregar os agendamentos.');
   }
 }
 
-// ── Notificações ──────────────────────────────────────────────
+// â”€â”€ NotificaÃ§Ãµes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 async function carregarBadgeNotificacoes() {
   try {
-    const res = await fetch(`${API}/agendamentos`, { headers: authHeader() });
+    const res = await fetch(`/agendamentos`, { headers: authHeader() });
     if (!res.ok) return;
     const data = await res.json();
     const naoLidos = (data.agendamentos || []).filter(a => !a.lido).length;
@@ -547,7 +546,7 @@ function atualizarBadge(count) {
 
 async function carregarNotificacoes() {
   try {
-    const res = await fetch(`${API}/agendamentos`, { headers: authHeader() });
+    const res = await fetch(`/agendamentos`, { headers: authHeader() });
     if (res.status === 401) { window.location.href = 'login.html'; return; }
     const data = await res.json();
     const naoLidos = (data.agendamentos || []).filter(a => !a.lido);
@@ -569,13 +568,13 @@ async function carregarNotificacoes() {
       btn.addEventListener('click', () => marcarLido(btn.dataset.id));
     });
   } catch {
-    mostrarAlerta('alertaNotificacoes', 'Não foi possível carregar as notificações.');
+    mostrarAlerta('alertaNotificacoes', 'NÃ£o foi possÃ­vel carregar as notificaÃ§Ãµes.');
   }
 }
 
 async function marcarLido(id) {
   try {
-    const res = await fetch(`${API}/agendamentos/${id}/lido`, {
+    const res = await fetch(`/agendamentos/${id}/lido`, {
       method: 'PATCH',
       headers: authHeader(),
     });
