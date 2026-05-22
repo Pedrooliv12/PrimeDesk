@@ -1,0 +1,180 @@
+:root {
+  --pallet-blue: #0099ff;
+  --pallet-green: #73d700;
+  --pallet-gradient: linear-gradient(135deg, #0099ff 0%, #73d700 100%);
+  --background-dark: #23272a;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--background-dark);
+  color: white;
+}
+
+/* ── Navbar ── */
+.navbar { padding: 1.2rem 5%; background-color: var(--background-dark); }
+
+.logo {
+  font-size: 1.4rem;
+  font-weight: 800;
+  text-decoration: none;
+  background: var(--pallet-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ── Container ── */
+.register-container {
+  min-height: calc(100vh - 72px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.register-card {
+  background: #2f3136;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 50px;
+  max-width: 440px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.title-register {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.register-subtitle {
+  font-size: 0.95rem;
+  color: #b9bbbe;
+  margin-bottom: 28px;
+}
+
+/* ── Alerta ── */
+.alerta {
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.alerta-erro {
+  background: rgba(255, 60, 60, 0.12);
+  border: 1px solid rgba(255, 60, 60, 0.35);
+  color: #ff6b6b;
+}
+
+.alerta-sucesso {
+  background: rgba(115, 215, 0, 0.1);
+  border: 1px solid rgba(115, 215, 0, 0.35);
+  color: var(--pallet-green);
+}
+
+/* ── Form ── */
+.form-control {
+  background: #23272a !important;
+  border: 1px solid #4f545c !important;
+  color: white !important;
+  border-radius: 10px !important;
+  padding: 14px 18px !important;
+  font-size: 1rem !important;
+  margin-bottom: 16px;
+  width: 100%;
+  font-family: inherit;
+}
+
+.form-control::placeholder { color: #72767d; }
+
+select.form-control {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%2372767d' d='M6 8L0 0h12z'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 18px center !important;
+  padding-right: 44px !important;
+}
+
+select.form-control option { background: #23272a; color: white; }
+
+.form-control:focus {
+  border-color: var(--pallet-blue) !important;
+  box-shadow: 0 0 0 4px rgba(0, 153, 255, 0.1) !important;
+  outline: none;
+  background: #23272a !important;
+}
+
+/* ── Campo senha com toggle ── */
+.input-senha {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.input-senha .form-control {
+  margin-bottom: 0;
+  padding-right: 50px !important;
+}
+
+.toggle-senha {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #72767d;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+
+.toggle-senha:hover { color: white; }
+
+/* ── Botão submit ── */
+.btn-primary {
+  background: var(--pallet-gradient);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 1rem;
+  font-family: inherit;
+  width: 100%;
+  margin-top: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+  box-shadow: 0 4px 15px rgba(0, 153, 255, 0.2);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: scale(1.03);
+  box-shadow: 0 8px 25px rgba(115, 215, 0, 0.3);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Link ── */
+.text-muted { color: #b9bbbe !important; }
+
+.link-auth {
+  color: var(--pallet-blue);
+  text-decoration: none;
+  font-weight: 700;
+  transition: color 0.2s;
+}
+
+.link-auth:hover { color: var(--pallet-green); }

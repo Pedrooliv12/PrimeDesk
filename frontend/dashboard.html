@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard | PrimeDesk</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <a href="dashboard.html" class="logo">PrimeDesk</a>
+    </div>
+
+    <nav class="nav-menu">
+      <a href="#" class="nav-item active" data-view="agendas">
+        <i class="bi bi-people"></i> Profissionais
+      </a>
+      <a href="#" class="nav-item" data-view="horarios">
+        <i class="bi bi-clock"></i> Horários
+      </a>
+      <a href="#" class="nav-item" data-view="agendamentos">
+        <i class="bi bi-calendar-check"></i> Agendamentos
+      </a>
+      <a href="#" class="nav-item" data-view="notificacoes">
+        <i class="bi bi-bell"></i> Notificações
+        <span class="badge-notif d-none" id="badgeNotif"></span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="empresa-info">
+        <i class="bi bi-building"></i>
+        <span id="nomeEmpresa">Carregando...</span>
+      </div>
+      <button class="btn-copiar-link" id="btnCopiarLink">
+        <i class="bi bi-link-45deg"></i> Copiar link da agenda
+      </button>
+      <button class="btn-sair" id="btnSair">
+        <i class="bi bi-box-arrow-right"></i> Sair
+      </button>
+    </div>
+  </div>
+
+  <!-- Conteúdo principal -->
+  <main class="main-content">
+
+    <!-- View: Profissionais -->
+    <div id="viewAgendas">
+      <div class="content-header">
+        <div>
+          <h2>Profissionais</h2>
+          <p class="content-subtitle">Gerencie os profissionais da sua empresa</p>
+        </div>
+        <button class="btn-create" id="btnCriarProfissional">
+          <i class="bi bi-plus-lg"></i> Novo Profissional
+        </button>
+      </div>
+
+      <div id="alertaProfissional" class="alerta d-none"></div>
+
+      <div id="listaProfissionais" class="profissionais-grid">
+        <!-- cards injetados via JS -->
+      </div>
+
+      <div id="emptyAgendas" class="empty-state d-none">
+        <i class="bi bi-people" style="font-size: 2.5rem; color: #4f545c;"></i>
+        <h4>Nenhum profissional cadastrado</h4>
+        <p>Crie o primeiro profissional para começar a receber agendamentos.</p>
+        <button class="btn-create" onclick="document.getElementById('btnCriarProfissional').click()">
+          <i class="bi bi-plus-lg"></i> Criar profissional
+        </button>
+      </div>
+    </div>
+
+    <!-- View: Horários (Disponibilidade semanal por profissional) -->
+    <div id="viewHorarios" class="d-none">
+      <div class="content-header">
+        <div>
+          <h2>Disponibilidade Semanal</h2>
+          <p class="content-subtitle">Defina os horários disponíveis de cada profissional para cada dia da semana</p>
+        </div>
+      </div>
+
+      <div id="alertaHorario" class="alerta d-none"></div>
+
+      <div class="profissional-selector">
+        <label class="form-label">Profissional</label>
+        <select id="profissionalDispSelect" class="form-control">
+          <option value="">Selecione um profissional</option>
+        </select>
+      </div>
+
+      <div id="semanaGrid" class="semana-grid d-none">
+        <!-- 7 colunas de dias injetadas via JS -->
+      </div>
+
+      <div id="emptyHorarios" class="empty-state">
+        <i class="bi bi-calendar-week" style="font-size: 2.5rem; color: #4f545c;"></i>
+        <h4>Selecione um profissional</h4>
+        <p>Escolha um profissional acima para configurar a disponibilidade semanal dele.</p>
+      </div>
+    </div>
+
+    <!-- View: Agendamentos -->
+    <div id="viewAgendamentos" class="d-none">
+      <div class="content-header">
+        <div>
+          <h2>Agendamentos</h2>
+          <p class="content-subtitle">Histórico completo de agendamentos dos seus clientes</p>
+        </div>
+      </div>
+
+      <div id="alertaAgendamentos" class="alerta d-none"></div>
+
+      <div id="listaAgendamentos" class="agendamentos-lista"></div>
+
+      <div id="emptyAgendamentos" class="empty-state d-none">
+        <i class="bi bi-calendar-x" style="font-size: 2.5rem; color: #4f545c;"></i>
+        <h4>Nenhum agendamento ainda</h4>
+        <p>Quando seus clientes agendarem horários, eles aparecerão aqui.</p>
+      </div>
+    </div>
+
+    <!-- View: Notificações -->
+    <div id="viewNotificacoes" class="d-none">
+      <div class="content-header">
+        <div>
+          <h2>Notificações</h2>
+          <p class="content-subtitle">Novos agendamentos não lidos</p>
+        </div>
+        <button class="btn-create" id="btnMarcarTodosLidos">
+          <i class="bi bi-check-all"></i> Marcar todos como lidos
+        </button>
+      </div>
+
+      <div id="alertaNotificacoes" class="alerta d-none"></div>
+
+      <div id="listaNotificacoes" class="agendamentos-lista"></div>
+
+      <div id="emptyNotificacoes" class="empty-state d-none">
+        <i class="bi bi-bell-slash" style="font-size: 2.5rem; color: #4f545c;"></i>
+        <h4>Tudo em dia!</h4>
+        <p>Nenhuma notificação não lida.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Modal: Criar Profissional -->
+  <div class="modal-overlay d-none" id="modalProfissional">
+    <div class="modal-card">
+      <div class="modal-header-custom">
+        <h5 id="modalTituloProfissional">Novo Profissional</h5>
+        <button class="modal-close" id="modalCloseProfissional"><i class="bi bi-x-lg"></i></button>
+      </div>
+
+      <div id="alertaModalProfissional" class="alerta d-none"></div>
+
+      <form id="formProfissional" novalidate>
+        <input type="hidden" id="profissionalId" />
+        <label class="form-label">Nome</label>
+        <input type="text" id="nomeProfissional" class="form-control" placeholder="Ex: Dr. João Silva" maxlength="100" required />
+
+        <label class="form-label mt-3">Especialidade</label>
+        <input type="text" id="especialidade" class="form-control" placeholder="Ex: Cardiologia" maxlength="100" required />
+
+        <button type="submit" class="btn-create w-100 mt-4" id="btnSalvarProfissional">
+          Salvar
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Adicionar slot de disponibilidade -->
+  <div class="modal-overlay d-none" id="modalDisponibilidade">
+    <div class="modal-card">
+      <div class="modal-header-custom">
+        <h5 id="modalDispTitulo">Adicionar horário</h5>
+        <button class="modal-close" id="modalCloseDisp"><i class="bi bi-x-lg"></i></button>
+      </div>
+
+      <div id="alertaModalDisp" class="alerta d-none"></div>
+
+      <form id="formDisponibilidade" novalidate>
+        <input type="hidden" id="dispDiaSemana" />
+
+        <div class="row-times">
+          <div>
+            <label class="form-label">Início</label>
+            <input type="time" id="dispHoraInicio" class="form-control" required />
+          </div>
+          <div>
+            <label class="form-label">Fim</label>
+            <input type="time" id="dispHoraFim" class="form-control" required />
+          </div>
+        </div>
+
+        <button type="submit" class="btn-create w-100 mt-4" id="btnSalvarDisp">
+          Adicionar
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/dashboard.js"></script>
+
+</body>
+</html>
