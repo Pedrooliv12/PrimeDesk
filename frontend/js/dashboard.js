@@ -24,8 +24,9 @@ const VIEWS = {
 navItems.forEach(item => {
   item.addEventListener('click', (e) => {
     e.preventDefault();
-    navItems.forEach(n => n.classList.remove('active'));
+    navItems.forEach(n => { n.classList.remove('active'); n.removeAttribute('aria-current'); });
     item.classList.add('active');
+    item.setAttribute('aria-current', 'page');
     const view = item.dataset.view;
     Object.entries(VIEWS).forEach(([key, el]) => el.classList.toggle('d-none', key !== view));
     if (view === 'horarios') inicializarDisponibilidades();
@@ -53,6 +54,12 @@ document.getElementById('btnCopiarLink').addEventListener('click', () => {
   });
 });
 
+function getFocusable(container) {
+  return [...container.querySelectorAll(
+    'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+  )];
+}
+
 function authHeader() {
   return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };
 }
@@ -67,13 +74,20 @@ function ocultarAlerta(id) {
   document.getElementById(id).className = 'alerta d-none';
 }
 
+let modalTrigger = null;
+
 function abrirModal(id) {
-  document.getElementById(id).classList.remove('d-none');
+  const overlay = document.getElementById(id);
+  overlay.classList.remove('d-none');
+  modalTrigger = document.activeElement;
+  const primeiro = getFocusable(overlay)[0];
+  if (primeiro) primeiro.focus();
 }
 
 function fecharModal(id, formId) {
   document.getElementById(id).classList.add('d-none');
   if (formId) document.getElementById(formId).reset();
+  if (modalTrigger) { modalTrigger.focus(); modalTrigger = null; }
 }
 
 function setButtonLoading(btnId, loading) {
@@ -125,8 +139,8 @@ function renderProfissionais(lista) {
           <span class="badge-especialidade">${especialidade}</span>
         </div>
         <div class="profissional-actions">
-          <button class="btn-icon btn-editar" title="Editar"><i class="bi bi-pencil"></i></button>
-          <button class="btn-icon btn-icon-danger btn-deletar" title="Excluir"><i class="bi bi-trash"></i></button>
+          <button class="btn-icon btn-editar" aria-label="Editar ${nome}" title="Editar"><i class="bi bi-pencil" aria-hidden="true"></i></button>
+          <button class="btn-icon btn-icon-danger btn-deletar" aria-label="Excluir ${nome}" title="Excluir"><i class="bi bi-trash" aria-hidden="true"></i></button>
         </div>
       </div>
     `;
@@ -429,6 +443,29 @@ async function excluirDisponibilidade(id) {
     mostrarAlerta('alertaHorario', 'Não foi possível conectar ao servidor.');
   }
 }
+
+document.addEventListener('keydown', (e) => {
+  const aberto = document.querySelector('.modal-overlay:not(.d-none)');
+  if (!aberto) return;
+
+  if (e.key === 'Escape') {
+    if (aberto.id === 'modalProfissional') fecharModal('modalProfissional', 'formProfissional');
+    if (aberto.id === 'modalDisponibilidade') fecharModal('modalDisponibilidade', 'formDisponibilidade');
+    return;
+  }
+
+  if (e.key === 'Tab') {
+    const focusable = getFocusable(aberto);
+    if (!focusable.length) return;
+    const primeiro = focusable[0];
+    const ultimo = focusable[focusable.length - 1];
+    if (e.shiftKey) {
+      if (document.activeElement === primeiro) { e.preventDefault(); ultimo.focus(); }
+    } else {
+      if (document.activeElement === ultimo) { e.preventDefault(); primeiro.focus(); }
+    }
+  }
+});
 
 carregarProfissionais();
 carregarBadgeNotificacoes();

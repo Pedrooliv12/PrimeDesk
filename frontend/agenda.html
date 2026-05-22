@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="css/agenda.css" />
 </head>
 <body>
+  <a href="#conteudo-principal" class="skip-link">Pular para o conteúdo principal</a>
 
   <nav class="navbar">
     <div class="container-fluid">
@@ -16,7 +17,7 @@
     </div>
   </nav>
 
-  <div class="page-container">
+  <div class="page-container" id="conteudo-principal">
 
     <div id="loading" class="estado-vazio">
       <p class="text-muted">Carregando agenda...</p>
@@ -38,12 +39,12 @@
   </div>
 
   <!-- Modal de confirmação -->
-  <div class="modal-overlay d-none" id="modalOverlay">
+  <div class="modal-overlay d-none" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitulo">
     <div class="modal-card">
-      <h3 class="h5 fw-bold mb-1">Confirmar agendamento</h3>
+      <h3 class="h5 fw-bold mb-1" id="modalTitulo">Confirmar agendamento</h3>
       <p class="text-muted small mb-4" id="modalResumo"></p>
 
-      <div id="modalAlerta" class="alerta d-none"></div>
+      <div id="modalAlerta" class="alerta d-none" aria-live="polite"></div>
 
       <label class="form-label">Nome completo</label>
       <input type="text" id="nomeCliente" placeholder="Seu nome" class="form-control mb-3" maxlength="100" />
