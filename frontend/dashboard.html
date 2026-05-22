@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="css/dashboard.css" />
 </head>
 <body>
+  <a href="#conteudo-principal" class="skip-link">Pular para o conteúdo principal</a>
 
   <!-- Sidebar -->
   <div class="sidebar">
@@ -17,19 +18,19 @@
       <a href="dashboard.html" class="logo">PrimeDesk</a>
     </div>
 
-    <nav class="nav-menu">
-      <a href="#" class="nav-item active" data-view="agendas">
-        <i class="bi bi-people"></i> Profissionais
+    <nav class="nav-menu" aria-label="Navegação principal">
+      <a href="#" class="nav-item active" data-view="agendas" aria-current="page">
+        <i class="bi bi-people" aria-hidden="true"></i> Profissionais
       </a>
       <a href="#" class="nav-item" data-view="horarios">
-        <i class="bi bi-clock"></i> Horários
+        <i class="bi bi-clock" aria-hidden="true"></i> Horários
       </a>
       <a href="#" class="nav-item" data-view="agendamentos">
-        <i class="bi bi-calendar-check"></i> Agendamentos
+        <i class="bi bi-calendar-check" aria-hidden="true"></i> Agendamentos
       </a>
       <a href="#" class="nav-item" data-view="notificacoes">
-        <i class="bi bi-bell"></i> Notificações
-        <span class="badge-notif d-none" id="badgeNotif"></span>
+        <i class="bi bi-bell" aria-hidden="true"></i> Notificações
+        <span class="badge-notif d-none" id="badgeNotif" aria-live="polite" aria-atomic="true"></span>
       </a>
     </nav>
 
@@ -48,7 +49,7 @@
   </div>
 
   <!-- Conteúdo principal -->
-  <main class="main-content">
+  <main class="main-content" id="conteudo-principal">
 
     <!-- View: Profissionais -->
     <div id="viewAgendas">
@@ -62,7 +63,7 @@
         </button>
       </div>
 
-      <div id="alertaProfissional" class="alerta d-none"></div>
+      <div id="alertaProfissional" class="alerta d-none" aria-live="polite"></div>
 
       <div id="listaProfissionais" class="profissionais-grid">
         <!-- cards injetados via JS -->
@@ -87,7 +88,7 @@
         </div>
       </div>
 
-      <div id="alertaHorario" class="alerta d-none"></div>
+      <div id="alertaHorario" class="alerta d-none" aria-live="polite"></div>
 
       <div class="profissional-selector">
         <label class="form-label">Profissional</label>
@@ -116,7 +117,7 @@
         </div>
       </div>
 
-      <div id="alertaAgendamentos" class="alerta d-none"></div>
+      <div id="alertaAgendamentos" class="alerta d-none" aria-live="polite"></div>
 
       <div id="listaAgendamentos" class="agendamentos-lista"></div>
 
@@ -139,7 +140,7 @@
         </button>
       </div>
 
-      <div id="alertaNotificacoes" class="alerta d-none"></div>
+      <div id="alertaNotificacoes" class="alerta d-none" aria-live="polite"></div>
 
       <div id="listaNotificacoes" class="agendamentos-lista"></div>
 
@@ -153,14 +154,14 @@
   </main>
 
   <!-- Modal: Criar Profissional -->
-  <div class="modal-overlay d-none" id="modalProfissional">
+  <div class="modal-overlay d-none" id="modalProfissional" role="dialog" aria-modal="true" aria-labelledby="modalTituloProfissional">
     <div class="modal-card">
       <div class="modal-header-custom">
         <h5 id="modalTituloProfissional">Novo Profissional</h5>
-        <button class="modal-close" id="modalCloseProfissional"><i class="bi bi-x-lg"></i></button>
+        <button class="modal-close" id="modalCloseProfissional" aria-label="Fechar modal"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
       </div>
 
-      <div id="alertaModalProfissional" class="alerta d-none"></div>
+      <div id="alertaModalProfissional" class="alerta d-none" aria-live="polite"></div>
 
       <form id="formProfissional" novalidate>
         <input type="hidden" id="profissionalId" />
@@ -178,14 +179,14 @@
   </div>
 
   <!-- Modal: Adicionar slot de disponibilidade -->
-  <div class="modal-overlay d-none" id="modalDisponibilidade">
+  <div class="modal-overlay d-none" id="modalDisponibilidade" role="dialog" aria-modal="true" aria-labelledby="modalDispTitulo">
     <div class="modal-card">
       <div class="modal-header-custom">
         <h5 id="modalDispTitulo">Adicionar horário</h5>
-        <button class="modal-close" id="modalCloseDisp"><i class="bi bi-x-lg"></i></button>
+        <button class="modal-close" id="modalCloseDisp" aria-label="Fechar modal"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
       </div>
 
-      <div id="alertaModalDisp" class="alerta d-none"></div>
+      <div id="alertaModalDisp" class="alerta d-none" aria-live="polite"></div>
 
       <form id="formDisponibilidade" novalidate>
         <input type="hidden" id="dispDiaSemana" />

@@ -16,6 +16,7 @@ const elBtnCancelar = document.getElementById('btnCancelar');
 
 // { id_horario, resumo }
 let slotSelecionado = null;
+let slotTrigger = null;
 
 if (!empresaSlug) {
   mostrarErro();
@@ -96,6 +97,7 @@ function renderizarSlots(profissional) {
             data-profissional="${escapeHtml(profissional.nome)}"
             data-hora="${s.hora}"
             data-data="${s.dataFormatada}"
+            aria-label="Agendar com ${escapeHtml(profissional.nome)}, ${s.dataFormatada} às ${s.hora}"
           >${s.hora}</button>
         `).join('')}
       </div>
@@ -110,6 +112,7 @@ function abrirModal(btn) {
     id_horario: parseInt(btn.dataset.idHorario),
     resumo: `${btn.dataset.profissional} — ${btn.dataset.data} às ${btn.dataset.hora}`,
   };
+  slotTrigger = btn;
 
   elModalResumo.textContent = slotSelecionado.resumo;
   elNomeCliente.value = '';
@@ -125,12 +128,36 @@ function abrirModal(btn) {
 function fecharModal() {
   elModalOverlay.classList.add('d-none');
   slotSelecionado = null;
+  if (slotTrigger) { slotTrigger.focus(); slotTrigger = null; }
 }
 
 elBtnCancelar.addEventListener('click', fecharModal);
 
 elModalOverlay.addEventListener('click', (e) => {
   if (e.target === elModalOverlay) fecharModal();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (elModalOverlay.classList.contains('d-none')) return;
+
+  if (e.key === 'Escape') {
+    fecharModal();
+    return;
+  }
+
+  if (e.key === 'Tab') {
+    const focusable = [...elModalOverlay.querySelectorAll(
+      'button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )];
+    if (!focusable.length) return;
+    const primeiro = focusable[0];
+    const ultimo = focusable[focusable.length - 1];
+    if (e.shiftKey) {
+      if (document.activeElement === primeiro) { e.preventDefault(); ultimo.focus(); }
+    } else {
+      if (document.activeElement === ultimo) { e.preventDefault(); primeiro.focus(); }
+    }
+  }
 });
 
 elBtnConfirmar.addEventListener('click', async () => {
