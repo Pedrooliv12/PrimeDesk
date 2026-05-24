@@ -131,6 +131,19 @@ function fecharModal() {
   if (slotTrigger) { slotTrigger.focus(); slotTrigger = null; }
 }
 
+elWhatsappCliente.addEventListener('input', () => {
+  let v = elWhatsappCliente.value.replace(/\D/g, '').slice(0, 11);
+  if (v.length > 6) {
+    elWhatsappCliente.value = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
+  } else if (v.length > 2) {
+    elWhatsappCliente.value = `(${v.slice(0, 2)}) ${v.slice(2)}`;
+  } else if (v.length > 0) {
+    elWhatsappCliente.value = `(${v}`;
+  } else {
+    elWhatsappCliente.value = '';
+  }
+});
+
 elBtnCancelar.addEventListener('click', fecharModal);
 
 elModalOverlay.addEventListener('click', (e) => {
@@ -166,6 +179,12 @@ elBtnConfirmar.addEventListener('click', async () => {
 
   if (!nome || !whatsapp) {
     mostrarAlerta('Preencha todos os campos.', 'erro');
+    return;
+  }
+
+  const whatsappLimpo = whatsapp.replace(/\D/g, '');
+  if (!/^[1-9]{2}9\d{8}$/.test(whatsappLimpo)) {
+    mostrarAlerta('WhatsApp inválido. Use o formato (11) 99999-9999.', 'erro');
     return;
   }
 

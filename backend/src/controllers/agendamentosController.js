@@ -15,6 +15,11 @@ async function criarAgendamento(req, res) {
     return res.status(400).json({ erro: 'O WhatsApp deve ter no máximo 15 caracteres.' });
   }
 
+  const whatsappLimpo = cliente_whatsapp.replace(/\D/g, '');
+  if (!/^[1-9]{2}9\d{8}$/.test(whatsappLimpo)) {
+    return res.status(400).json({ erro: 'WhatsApp inválido. Use o formato (11) 99999-9999.' });
+  }
+
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
