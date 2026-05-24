@@ -125,7 +125,7 @@ async function carregarProfissionais() {
     profissionaisCached = data.profissionais || [];
     renderProfissionais(profissionaisCached);
   } catch {
-    mostrarAlerta('alertaProfissional', 'NÃ£o foi possÃ­vel carregar os profissionais.');
+    mostrarAlerta('alertaProfissional', 'Não foi possível carregar os profissionais.');
   }
 }
 
@@ -225,14 +225,14 @@ formProfissional.addEventListener('submit', async (e) => {
     fecharModal('modalProfissional', 'formProfissional');
     carregarProfissionais();
   } catch {
-    mostrarAlerta('alertaModalProfissional', 'NÃ£o foi possÃ­vel conectar ao servidor.');
+    mostrarAlerta('alertaModalProfissional', 'Não foi possível conectar ao servidor.');
   } finally {
     setButtonLoading('btnSalvarProfissional', false);
   }
 });
 
 async function excluirProfissional(id) {
-  if (!confirm('Excluir este profissional? Os horÃ¡rios vinculados tambÃ©m serÃ£o removidos.')) return;
+  if (!confirm('Excluir este profissional? Os horários vinculados também serão removidos.')) return;
   try {
     const res = await fetch(`/profissionais/${id}`, {
       method: 'DELETE',
@@ -241,7 +241,7 @@ async function excluirProfissional(id) {
     if (res.ok) carregarProfissionais();
     else mostrarAlerta('alertaProfissional', 'Erro ao excluir profissional.');
   } catch {
-    mostrarAlerta('alertaProfissional', 'NÃ£o foi possÃ­vel conectar ao servidor.');
+    mostrarAlerta('alertaProfissional', 'Não foi possível conectar ao servidor.');
   }
 }
 
@@ -252,7 +252,7 @@ const DIAS_SEMANA = [
   { idx: 3, label: 'Qua' },
   { idx: 4, label: 'Qui' },
   { idx: 5, label: 'Sex' },
-  { idx: 6, label: 'SÃ¡b' },
+  { idx: 6, label: 'Sáb' },
 ];
 
 let profissionalSelecionadoId = null;
@@ -275,7 +275,7 @@ async function inicializarDisponibilidades() {
       select.appendChild(option);
     });
   } catch {
-    mostrarAlerta('alertaHorario', 'NÃ£o foi possÃ­vel carregar os profissionais.');
+    mostrarAlerta('alertaHorario', 'Não foi possível carregar os profissionais.');
   }
 }
 
@@ -317,7 +317,7 @@ async function carregarDisponibilidades() {
     const data = await res.json();
     renderSemana(data.disponibilidades || []);
   } catch {
-    mostrarAlerta('alertaHorario', 'NÃ£o foi possÃ­vel carregar as disponibilidades.');
+    mostrarAlerta('alertaHorario', 'Não foi possível carregar as disponibilidades.');
   }
 }
 
@@ -343,7 +343,7 @@ function renderSemana(disponibilidades) {
             </div>
           `;
         }).join('')
-      : '<div class="dia-vazio">Sem horÃ¡rios</div>';
+      : '<div class="dia-vazio">Sem horários</div>';
 
     return `
       <div class="dia-card">
@@ -377,7 +377,7 @@ document.getElementById('semanaGrid').addEventListener('click', (e) => {
       return;
     }
     dispDiaSemana.value = btnAdd.dataset.diaIdx;
-    modalDispTitulo.textContent = `Adicionar horÃ¡rio â€” ${btnAdd.dataset.diaLabel}`;
+    modalDispTitulo.textContent = `Adicionar horário — ${btnAdd.dataset.diaLabel}`;
     abrirModal('modalDisponibilidade');
     ocultarAlerta('alertaModalDisp');
   }
@@ -402,12 +402,12 @@ formDisponibilidade.addEventListener('submit', async (e) => {
   const hora_fim = document.getElementById('dispHoraFim').value;
 
   if (!hora_inicio || !hora_fim) {
-    mostrarAlerta('alertaModalDisp', 'Preencha inÃ­cio e fim.', 'erro');
+    mostrarAlerta('alertaModalDisp', 'Preencha início e fim.', 'erro');
     return;
   }
 
   if (hora_inicio >= hora_fim) {
-    mostrarAlerta('alertaModalDisp', 'Hora de inÃ­cio deve ser menor que hora de fim.', 'erro');
+    mostrarAlerta('alertaModalDisp', 'Hora de início deve ser menor que hora de fim.', 'erro');
     return;
   }
 
@@ -437,23 +437,23 @@ formDisponibilidade.addEventListener('submit', async (e) => {
     fecharModal('modalDisponibilidade', 'formDisponibilidade');
     carregarDisponibilidades();
   } catch {
-    mostrarAlerta('alertaModalDisp', 'NÃ£o foi possÃ­vel conectar ao servidor.', 'erro');
+    mostrarAlerta('alertaModalDisp', 'Não foi possível conectar ao servidor.', 'erro');
   } finally {
     setButtonLoading('btnSalvarDisp', false);
   }
 });
 
 async function excluirDisponibilidade(id) {
-  if (!confirm('Remover este horÃ¡rio?')) return;
+  if (!confirm('Remover este horário?')) return;
   try {
     const res = await fetch(`/disponibilidades/${id}`, {
       method: 'DELETE',
       headers: authHeader(),
     });
     if (res.ok) carregarDisponibilidades();
-    else mostrarAlerta('alertaHorario', 'Erro ao remover horÃ¡rio.');
+    else mostrarAlerta('alertaHorario', 'Erro ao remover horário.');
   } catch {
-    mostrarAlerta('alertaHorario', 'NÃ£o foi possÃ­vel conectar ao servidor.');
+    mostrarAlerta('alertaHorario', 'Não foi possível conectar ao servidor.');
   }
 }
 
@@ -498,7 +498,7 @@ function renderAgendamentoCard(a, comBotaoLido = false) {
         <div class="agendamento-cliente">${escapeHtml(a.nome_cliente)}</div>
         <div class="agendamento-detalhe">
           <i class="bi bi-person-badge"></i> ${escapeHtml(a.nome_profissional)}
-          &nbsp;Â·&nbsp;
+          &nbsp;·&nbsp;
           <i class="bi bi-calendar3"></i> ${dataHora}
         </div>
         <div class="agendamento-contato">
@@ -532,11 +532,11 @@ async function carregarAgendamentos() {
     empty.classList.add('d-none');
     el.innerHTML = lista.map(a => renderAgendamentoCard(a, false)).join('');
   } catch {
-    mostrarAlerta('alertaAgendamentos', 'NÃ£o foi possÃ­vel carregar os agendamentos.');
+    mostrarAlerta('alertaAgendamentos', 'Não foi possível carregar os agendamentos.');
   }
 }
 
-// â”€â”€ NotificaÃ§Ãµes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Notificações ──────────────────────────────────────────────────
 
 async function carregarBadgeNotificacoes() {
   try {
@@ -582,7 +582,7 @@ async function carregarNotificacoes() {
       btn.addEventListener('click', () => marcarLido(btn.dataset.id));
     });
   } catch {
-    mostrarAlerta('alertaNotificacoes', 'NÃ£o foi possÃ­vel carregar as notificaÃ§Ãµes.');
+    mostrarAlerta('alertaNotificacoes', 'Não foi possível carregar as notificações.');
   }
 }
 
