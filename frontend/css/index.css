@@ -274,11 +274,62 @@ body {
   border-top: 1px solid var(--border-subtle);
 }
 
+/* ── Navbar (toggler estilo dark) ── */
+.navbar-toggler {
+  border: 1px solid var(--border-subtle);
+  padding: 6px 10px;
+}
+.navbar-toggler:focus { box-shadow: 0 0 0 2px rgba(0, 153, 255, 0.4); }
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28255,255,255,0.9%29' stroke-width='2' stroke-linecap='round' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+.nav-cta { padding: 10px 22px; font-size: 0.9rem; }
+
 /* ── Responsivo ── */
+@media (max-width: 991.98px) {
+  .navbar { padding: 1rem 5%; }
+  #navMenu .nav-link { padding: 0.4rem 0; }
+  #navMenu .nav-cta { width: 100%; text-align: center; }
+}
+
 @media (max-width: 768px) {
-  .main-content { padding: 3.5rem 5% 4rem; }
+  .main-content { padding: 3rem 5% 3.5rem; }
   .title-primary { font-size: 2.4rem; }
-  .title-desc { font-size: 1rem; }
+  .title-desc { font-size: 1rem; margin-bottom: 2rem; }
   .dashboard-preview { height: 280px; }
-  .floating-stats { font-size: 0.75rem; padding: 9px 14px; }
+  .floating-stats {
+    font-size: 0.75rem;
+    padding: 9px 14px;
+    right: 10px;
+    top: 12px;
+  }
+  .section-recursos,
+  .section-steps,
+  .section-cta { padding: 3.5rem 0; }
+  .section-title { font-size: 1.6rem; }
+  .btn-primary, .btn-secondary { padding: 14px 28px; font-size: 0.9rem; }
+}
+
+@media (max-width: 480px) {
+  .main-content { padding: 2.5rem 5% 3rem; }
+  .title-primary { font-size: 2rem; line-height: 1.15; }
+  .title-desc { font-size: 0.95rem; }
+  .dashboard-preview { height: 240px; }
+  .side-bar-sim { width: 48px; }
+  .main-view-sim { padding: 18px; }
+  .card-sim { height: 50px; }
+  .floating-stats {
+    font-size: 0.7rem;
+    padding: 7px 11px;
+    right: 8px;
+  }
+  .btn-primary, .btn-secondary {
+    padding: 13px 22px;
+    font-size: 0.85rem;
+    width: 100%;
+    text-align: center;
+  }
+  .section-title { font-size: 1.4rem; }
+  .section-sub { font-size: 0.9rem; }
+  .feature-card, .step-card { padding: 1.5rem 1.25rem; }
 }

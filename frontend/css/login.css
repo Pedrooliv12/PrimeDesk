@@ -147,3 +147,24 @@ body {
 }
 
 .link-auth:hover { color: var(--pallet-green); }
+
+/* ── Responsivo ── */
+@media (max-width: 576px) {
+  .navbar { padding: 1rem 5%; }
+  .login-card {
+    padding: 32px 22px;
+    border-radius: 16px;
+  }
+  .login-card h2 { font-size: 1.3rem; }
+  .form-control {
+    padding: 12px 14px !important;
+    font-size: 0.95rem !important;
+  }
+  .btn-primary { padding: 13px; font-size: 0.95rem; }
+  .form-label { font-size: 12px; }
+}
+
+@media (max-width: 360px) {
+  .login-card { padding: 26px 18px; }
+  .login-card h2 { font-size: 1.2rem; }
+}

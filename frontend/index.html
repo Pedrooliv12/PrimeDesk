@@ -15,11 +15,16 @@
   <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
       <a class="logo" href="index.html">PrimeDesk</a>
-      <div class="ms-auto d-flex align-items-center gap-3">
-        <a href="#recursos" class="nav-link">Recursos</a>
-        <a href="#como-funciona" class="nav-link">Como funciona</a>
-        <a href="login.html" class="btn-secondary" style="padding: 10px 25px; font-size: 0.9rem;">Entrar</a>
-        <a href="cadastro.html" class="btn-primary" style="padding: 10px 25px; font-size: 0.9rem;">Começar Agora</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+        <div class="d-flex flex-column flex-lg-row align-items-lg-center gap-3 mt-3 mt-lg-0">
+          <a href="#recursos" class="nav-link">Recursos</a>
+          <a href="#como-funciona" class="nav-link">Como funciona</a>
+          <a href="login.html" class="btn-secondary nav-cta">Entrar</a>
+          <a href="cadastro.html" class="btn-primary nav-cta">Começar Agora</a>
+        </div>
       </div>
     </div>
   </nav>

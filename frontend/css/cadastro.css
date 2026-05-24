@@ -178,3 +178,25 @@ select.form-control option { background: #23272a; color: white; }
 }
 
 .link-auth:hover { color: var(--pallet-green); }
+
+/* ── Responsivo ── */
+@media (max-width: 576px) {
+  .navbar { padding: 1rem 5%; }
+  .register-container { padding: 1.5rem 0.75rem; }
+  .register-card {
+    padding: 32px 22px;
+    border-radius: 16px;
+  }
+  .title-register { font-size: 1.4rem; }
+  .register-subtitle { font-size: 0.88rem; margin-bottom: 22px; }
+  .form-control {
+    padding: 12px 14px !important;
+    font-size: 0.95rem !important;
+  }
+  .btn-primary { padding: 13px; font-size: 0.95rem; }
+}
+
+@media (max-width: 360px) {
+  .register-card { padding: 26px 18px; }
+  .title-register { font-size: 1.25rem; }
+}

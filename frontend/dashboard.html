@@ -12,8 +12,19 @@
 <body>
   <a href="#conteudo-principal" class="skip-link">Pular para o conteúdo principal</a>
 
+  <!-- Mobile topbar -->
+  <header class="mobile-topbar">
+    <button class="btn-menu" id="btnAbrirSidebar" aria-label="Abrir menu" aria-controls="sidebar" aria-expanded="false">
+      <i class="bi bi-list" aria-hidden="true"></i>
+    </button>
+    <a href="dashboard.html" class="logo">PrimeDesk</a>
+  </header>
+
+  <!-- Overlay pra fechar sidebar no mobile -->
+  <div class="sidebar-overlay" id="sidebarOverlay" hidden></div>
+
   <!-- Sidebar -->
-  <div class="sidebar">
+  <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <a href="dashboard.html" class="logo">PrimeDesk</a>
     </div>

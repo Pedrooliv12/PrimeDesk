@@ -660,3 +660,102 @@ select.form-control option {
   display: flex;
   gap: 8px;
 }
+
+/* ── Mobile topbar (escondida no desktop) ── */
+.mobile-topbar { display: none; }
+.sidebar-overlay { display: none; }
+
+/* ── Responsivo ── */
+@media (max-width: 900px) {
+  /* Topbar com hamburger */
+  .mobile-topbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: var(--card-dark);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0 16px;
+    z-index: 400;
+  }
+  .btn-menu {
+    background: none;
+    border: 1px solid var(--border-color);
+    color: white;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    cursor: pointer;
+  }
+  .btn-menu:hover { background: var(--card-mid); }
+
+  /* Sidebar vira off-canvas */
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    z-index: 600;
+    width: 270px;
+  }
+  .sidebar.sidebar-aberta { transform: translateX(0); }
+
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 500;
+  }
+
+  /* Main ocupa tela toda */
+  body { display: block; }
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+    padding: 76px 20px 32px;
+  }
+
+  /* Header em coluna */
+  .content-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+  .content-header h2 { font-size: 1.4rem; }
+  .btn-create { align-self: flex-start; }
+
+  /* Modal mais comportado */
+  .modal-card { padding: 24px 20px; border-radius: 14px; }
+
+  /* Cards com mais ar e quebra fácil */
+  .profissional-card,
+  .agendamento-card,
+  .horario-card {
+    flex-wrap: wrap;
+    padding: 16px;
+    gap: 12px;
+  }
+  .agendamento-acoes { width: 100%; justify-content: flex-end; }
+}
+
+@media (max-width: 480px) {
+  .main-content { padding: 72px 14px 24px; }
+  .content-header h2 { font-size: 1.25rem; }
+  .content-subtitle { font-size: 0.85rem; }
+  .modal-card { padding: 20px 16px; }
+  .modal-header-custom h5 { font-size: 1rem; }
+  .profissional-avatar { width: 40px; height: 40px; font-size: 1rem; }
+  .profissional-info h4 { font-size: 0.95rem; }
+  .badge-especialidade { font-size: 0.72rem; }
+  .agendamento-cliente { font-size: 0.95rem; }
+  .agendamento-detalhe,
+  .agendamento-contato { font-size: 0.8rem; }
+}

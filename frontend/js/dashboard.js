@@ -40,6 +40,29 @@ document.getElementById('btnSair').addEventListener('click', () => {
   window.location.href = 'login.html';
 });
 
+const sidebar = document.getElementById('sidebar');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+const btnAbrirSidebar = document.getElementById('btnAbrirSidebar');
+
+function abrirSidebar() {
+  sidebar.classList.add('sidebar-aberta');
+  sidebarOverlay.hidden = false;
+  btnAbrirSidebar.setAttribute('aria-expanded', 'true');
+}
+
+function fecharSidebar() {
+  sidebar.classList.remove('sidebar-aberta');
+  sidebarOverlay.hidden = true;
+  btnAbrirSidebar.setAttribute('aria-expanded', 'false');
+}
+
+btnAbrirSidebar.addEventListener('click', abrirSidebar);
+sidebarOverlay.addEventListener('click', fecharSidebar);
+
+navItems.forEach(item => item.addEventListener('click', () => {
+  if (window.matchMedia('(max-width: 900px)').matches) fecharSidebar();
+}));
+
 async function copiarTexto(texto) {
   if (navigator.clipboard && window.isSecureContext) {
     await navigator.clipboard.writeText(texto);
