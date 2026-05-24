@@ -54,7 +54,7 @@ formEmail.addEventListener('submit', async (e) => {
     formRedefinir.classList.remove('d-none');
     document.getElementById('resposta_seguranca').focus();
   } catch {
-    mostrarAlerta(alertaEmail, 'NÃ£o foi possÃ­vel conectar ao servidor.');
+    mostrarAlerta(alertaEmail, 'Não foi possível conectar ao servidor.');
   } finally {
     btnEmail.disabled = false;
     btnEmail.textContent = 'Continuar';
@@ -100,7 +100,7 @@ formRedefinir.addEventListener('submit', async (e) => {
     mostrarAlerta(alertaRedefinir, 'Senha redefinida! Redirecionando...', 'sucesso');
     setTimeout(() => { window.location.href = 'login.html'; }, 1500);
   } catch {
-    mostrarAlerta(alertaRedefinir, 'NÃ£o foi possÃ­vel conectar ao servidor.');
+    mostrarAlerta(alertaRedefinir, 'Não foi possível conectar ao servidor.');
   } finally {
     btnRedefinir.disabled = false;
     btnRedefinir.textContent = 'Redefinir senha';
