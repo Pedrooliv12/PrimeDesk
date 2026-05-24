@@ -1,6 +1,7 @@
 services:
   db:
     image: postgres:16-alpine
+    profiles: ["dev"]
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${DB_NAME:-primedesk}
@@ -24,15 +25,12 @@ services:
       - "${PORT:-3000}:3000"
     environment:
       PORT: 3000
-      DB_HOST: db
+      DB_HOST: ${DB_HOST:-db}
       DB_PORT: 5432
       DB_NAME: ${DB_NAME:-primedesk}
       DB_USER: ${DB_USER:-postgres}
       DB_PASSWORD: ${DB_PASSWORD:?defina DB_PASSWORD no .env da raiz}
       JWT_SECRET: ${JWT_SECRET:?defina JWT_SECRET no .env da raiz}
-    depends_on:
-      db:
-        condition: service_healthy
 
 volumes:
   postgres_data:
