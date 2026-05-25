@@ -1,10 +1,11 @@
 const pool = require('../db');
+const { calcularStatusAssinatura } = require('../utils/assinatura');
 
 async function listarAgendaPublica(req, res) {
   const { slug } = req.params;
 
   const empresaExiste = await pool.query(
-    'SELECT id, nome_empresa FROM empresas WHERE slug = $1',
+    'SELECT id, nome_empresa, trial_inicio, assinatura_ate FROM empresas WHERE slug = $1',
     [slug]
   );
 
@@ -13,6 +14,11 @@ async function listarAgendaPublica(req, res) {
   }
 
   const empresa = empresaExiste.rows[0];
+
+  const status = calcularStatusAssinatura(empresa);
+  if (!status.ativa) {
+    return res.status(403).json({ erro: 'agenda_indisponivel', mensagem: 'Esta agenda está temporariamente indisponível.' });
+  }
 
   const profissionais = await pool.query(
     'SELECT id, nome_profissional, especialidade FROM profissionais WHERE id_empresa = $1 ORDER BY nome_profissional',

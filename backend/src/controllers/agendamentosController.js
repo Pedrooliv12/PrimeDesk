@@ -1,4 +1,5 @@
 const pool = require('../db');
+const { calcularStatusAssinatura } = require('../utils/assinatura');
 
 async function criarAgendamento(req, res) {
   const { id_horario, nome_cliente, cliente_whatsapp } = req.body;
@@ -32,6 +33,23 @@ async function criarAgendamento(req, res) {
     if (horario.rows.length === 0) {
       await client.query('ROLLBACK');
       return res.status(404).json({ erro: 'Horário não encontrado.' });
+    }
+
+    const empresaDona = await client.query(
+      `SELECT e.trial_inicio, e.assinatura_ate
+       FROM empresas e
+       INNER JOIN profissionais p ON p.id_empresa = e.id
+       INNER JOIN horarios_disponiveis h ON h.id_profissional = p.id
+       WHERE h.id = $1`,
+      [id_horario]
+    );
+
+    if (empresaDona.rows.length > 0) {
+      const statusAssinatura = calcularStatusAssinatura(empresaDona.rows[0]);
+      if (!statusAssinatura.ativa) {
+        await client.query('ROLLBACK');
+        return res.status(403).json({ erro: 'agenda_indisponivel', mensagem: 'Esta agenda está temporariamente indisponível.' });
+      }
     }
 
     if (new Date(horario.rows[0].data_hora_inicio) <= new Date()) {

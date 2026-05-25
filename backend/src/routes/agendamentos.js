@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const { criarAgendamento, listarAgendamentos, marcarComoLido } = require('../controllers/agendamentosController');
-const { autenticarEmpresa } = require('../middlewares/auth');
+const { autenticarEmpresa, exigirAssinaturaAtiva } = require('../middlewares/auth');
 
 router.post('/', criarAgendamento);
-router.get('/', autenticarEmpresa, listarAgendamentos);
-router.patch('/:id/lido', autenticarEmpresa, marcarComoLido);
+router.get('/', autenticarEmpresa, exigirAssinaturaAtiva, listarAgendamentos);
+router.patch('/:id/lido', autenticarEmpresa, exigirAssinaturaAtiva, marcarComoLido);
 
 module.exports = router;

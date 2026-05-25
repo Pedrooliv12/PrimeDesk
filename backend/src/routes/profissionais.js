@@ -1,12 +1,12 @@
 const { Router } = require('express');
 const { cadastroProfissional, listarProfissionais, editarProfissional, deletarProfissional } = require('../controllers/profissionaisController');
-const { autenticarEmpresa } = require('../middlewares/auth');
+const { autenticarEmpresa, exigirAssinaturaAtiva } = require('../middlewares/auth');
 
 const router = Router();
 
-router.get('/', autenticarEmpresa, listarProfissionais);
-router.post('/', autenticarEmpresa, cadastroProfissional);
-router.put('/:id', autenticarEmpresa, editarProfissional);
-router.delete('/:id', autenticarEmpresa, deletarProfissional);
+router.get('/', autenticarEmpresa, exigirAssinaturaAtiva, listarProfissionais);
+router.post('/', autenticarEmpresa, exigirAssinaturaAtiva, cadastroProfissional);
+router.put('/:id', autenticarEmpresa, exigirAssinaturaAtiva, editarProfissional);
+router.delete('/:id', autenticarEmpresa, exigirAssinaturaAtiva, deletarProfissional);
 
 module.exports = router;

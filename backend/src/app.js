@@ -7,6 +7,7 @@ const horariosRoutes = require('./routes/horarios');
 const disponibilidadesRoutes = require('./routes/disponibilidades');
 const agendaRoutes = require('./routes/agenda');
 const agendamentosRoutes = require('./routes/agendamentos');
+const assinaturaRoutes = require('./routes/assinatura');
 
 const app = express();
 
@@ -26,5 +27,6 @@ app.use('/horarios', horariosRoutes);
 app.use('/disponibilidades', disponibilidadesRoutes);
 app.use('/agenda', agendaRoutes);
 app.use('/agendamentos', agendamentosRoutes);
+app.use('/assinatura', assinaturaRoutes);
 
 module.exports = app;

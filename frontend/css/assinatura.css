@@ -1,0 +1,249 @@
+:root {
+  --pallet-blue: #0099ff;
+  --pallet-green: #73d700;
+  --pallet-gradient: linear-gradient(135deg, #0099ff 0%, #73d700 100%);
+  --background-dark: #23272a;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--background-dark);
+  color: white;
+}
+
+.navbar {
+  padding: 1.2rem 5%;
+  background-color: var(--background-dark);
+  display: flex;
+  align-items: center;
+}
+
+.navbar .container-fluid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.4rem;
+  font-weight: 800;
+  text-decoration: none;
+  background: var(--pallet-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.btn-sair {
+  background: transparent;
+  border: 1px solid #404249;
+  color: #b9bbbe;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.btn-sair:hover {
+  background: #2f3136;
+  color: white;
+}
+
+/* ── Card ── */
+.assinatura-card {
+  background: #2f3136;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 50px 40px;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  text-align: center;
+}
+
+.alerta {
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.alerta-erro {
+  background: rgba(255, 60, 60, 0.12);
+  border: 1px solid rgba(255, 60, 60, 0.35);
+  color: #ff6b6b;
+}
+
+.alerta-sucesso {
+  background: rgba(115, 215, 0, 0.1);
+  border: 1px solid rgba(115, 215, 0, 0.35);
+  color: var(--pallet-green);
+}
+
+/* ── Status badge ── */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  background: rgba(0, 153, 255, 0.12);
+  border: 1px solid rgba(0, 153, 255, 0.35);
+  color: var(--pallet-blue);
+}
+
+.status-badge.status-trial {
+  background: rgba(255, 180, 0, 0.12);
+  border-color: rgba(255, 180, 0, 0.35);
+  color: #ffb400;
+}
+
+.status-badge.status-expirada {
+  background: rgba(255, 60, 60, 0.12);
+  border-color: rgba(255, 60, 60, 0.35);
+  color: #ff6b6b;
+}
+
+.status-badge.status-ativa {
+  background: rgba(115, 215, 0, 0.1);
+  border-color: rgba(115, 215, 0, 0.35);
+  color: var(--pallet-green);
+}
+
+/* ── Título e preço ── */
+.titulo {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.subtitulo {
+  color: #b9bbbe;
+  font-size: 0.95rem;
+  margin-bottom: 28px;
+}
+
+.preco-box {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 30px;
+}
+
+.preco-valor {
+  font-size: 3rem;
+  font-weight: 800;
+  background: var(--pallet-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.preco-periodo {
+  font-size: 1rem;
+  color: #b9bbbe;
+  font-weight: 600;
+}
+
+/* ── Features ── */
+.features {
+  list-style: none;
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.features li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  color: #dcddde;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.features li:last-child { border-bottom: none; }
+
+.features i {
+  color: var(--pallet-green);
+  font-size: 1.1rem;
+}
+
+/* ── Botão ── */
+.btn-assinar {
+  background: var(--pallet-gradient);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 1rem;
+  font-family: inherit;
+  width: 100%;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+  box-shadow: 0 4px 15px rgba(0, 153, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.btn-assinar:hover:not(:disabled) {
+  transform: scale(1.03);
+  box-shadow: 0 8px 25px rgba(115, 215, 0, 0.3);
+}
+
+.btn-assinar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.link-voltar {
+  display: inline-block;
+  color: var(--pallet-blue);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.link-voltar:hover { color: var(--pallet-green); }
+
+.aviso-academico {
+  margin-top: 24px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  font-size: 0.8rem;
+  color: #8e9297;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+}
+
+/* ── Responsivo ── */
+@media (max-width: 576px) {
+  .navbar { padding: 1rem 5%; }
+  .assinatura-card {
+    padding: 32px 22px;
+    border-radius: 16px;
+  }
+  .titulo { font-size: 1.4rem; }
+  .preco-valor { font-size: 2.4rem; }
+  .btn-assinar { padding: 13px; font-size: 0.95rem; }
+}

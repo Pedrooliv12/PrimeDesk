@@ -1,11 +1,11 @@
 const { Router } = require('express');
 const { criarHorario, listarHorarios, deletarHorario } = require('../controllers/horariosController');
-const { autenticarEmpresa } = require('../middlewares/auth');
+const { autenticarEmpresa, exigirAssinaturaAtiva } = require('../middlewares/auth');
 
 const router = Router();
 
-router.get('/', autenticarEmpresa, listarHorarios);
-router.post('/', autenticarEmpresa, criarHorario);
-router.delete('/:id', autenticarEmpresa, deletarHorario);
+router.get('/', autenticarEmpresa, exigirAssinaturaAtiva, listarHorarios);
+router.post('/', autenticarEmpresa, exigirAssinaturaAtiva, criarHorario);
+router.delete('/:id', autenticarEmpresa, exigirAssinaturaAtiva, deletarHorario);
 
 module.exports = router;

@@ -3,6 +3,7 @@ const empresaSlug = params.get('empresa');
 
 const elLoading = document.getElementById('loading');
 const elErro = document.getElementById('erro');
+const elIndisponivel = document.getElementById('indisponivel');
 const elConteudo = document.getElementById('conteudo');
 const elNomeEmpresa = document.getElementById('nomeEmpresa');
 const elListaProfissionais = document.getElementById('listaProfissionais');
@@ -27,6 +28,13 @@ if (!empresaSlug) {
 async function carregarAgenda() {
   try {
     const res = await fetch(`/agenda/${empresaSlug}`);
+    if (res.status === 403) {
+      const data = await res.json().catch(() => ({}));
+      if (data.erro === 'agenda_indisponivel') {
+        mostrarIndisponivel();
+        return;
+      }
+    }
     if (!res.ok) throw new Error();
     const data = await res.json();
 
@@ -38,6 +46,11 @@ async function carregarAgenda() {
   } catch {
     mostrarErro();
   }
+}
+
+function mostrarIndisponivel() {
+  elLoading.classList.add('d-none');
+  elIndisponivel.classList.remove('d-none');
 }
 
 function renderizarProfissionais(profissionais) {
@@ -205,7 +218,10 @@ elBtnConfirmar.addEventListener('click', async () => {
     const data = await res.json();
 
     if (!res.ok) {
-      mostrarAlerta(data.erro || 'Erro ao agendar. Tente novamente.', 'erro');
+      const mensagem = data.erro === 'agenda_indisponivel'
+        ? 'Esta agenda está temporariamente indisponível.'
+        : (data.erro || 'Erro ao agendar. Tente novamente.');
+      mostrarAlerta(mensagem, 'erro');
       elBtnConfirmar.disabled = false;
       elBtnConfirmar.textContent = 'Confirmar';
       return;

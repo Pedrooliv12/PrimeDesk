@@ -8,7 +8,9 @@ CREATE TABLE IF NOT EXISTS "empresas" (
   "senha_empresa" varchar(255),
   "slug" varchar(100) UNIQUE,
   "pergunta_seguranca" varchar(50),
-  "resposta_seguranca" varchar(255)
+  "resposta_seguranca" varchar(255),
+  "trial_inicio" timestamp DEFAULT CURRENT_TIMESTAMP,
+  "assinatura_ate" timestamp
 );
 
 CREATE TABLE IF NOT EXISTS "profissionais" (
@@ -44,3 +46,6 @@ CREATE TABLE IF NOT EXISTS "agendamentos" (
   "lido" boolean DEFAULT false,
   "criado_em" timestamp DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE "empresas" ADD COLUMN IF NOT EXISTS "trial_inicio" timestamp DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE "empresas" ADD COLUMN IF NOT EXISTS "assinatura_ate" timestamp;

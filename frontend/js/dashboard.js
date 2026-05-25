@@ -5,7 +5,48 @@ if (!token || !empresa) {
   window.location.href = 'login.html';
 }
 
+const fetchOriginal = window.fetch.bind(window);
+window.fetch = async function (...args) {
+  const response = await fetchOriginal(...args);
+  if (response.status === 403) {
+    const clone = response.clone();
+    try {
+      const data = await clone.json();
+      if (data && data.erro === 'assinatura_expirada') {
+        window.location.href = 'assinatura.html';
+        return new Promise(() => {});
+      }
+    } catch {}
+  }
+  return response;
+};
+
 document.getElementById('nomeEmpresa').textContent = empresa?.nome_empresa || '';
+
+async function carregarBadgeAssinatura() {
+  try {
+    const res = await fetch('/assinatura/status', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    const badge = document.getElementById('badgeAssinatura');
+    if (!badge) return;
+
+    badge.classList.remove('trial', 'ativa');
+    if (data.tipo === 'trial') {
+      badge.classList.add('trial');
+      badge.innerHTML = `<i class="bi bi-hourglass-split"></i> Trial: ${data.dias_restantes} dia(s) restantes`;
+      badge.classList.remove('d-none');
+    } else if (data.tipo === 'assinatura') {
+      badge.classList.add('ativa');
+      badge.innerHTML = `<i class="bi bi-check-circle"></i> Assinatura ativa (${data.dias_restantes}d)`;
+      badge.classList.remove('d-none');
+    }
+  } catch {}
+}
+
+carregarBadgeAssinatura();
 
 const navItems = document.querySelectorAll('.nav-item[data-view]');
 const viewAgendas = document.getElementById('viewAgendas');

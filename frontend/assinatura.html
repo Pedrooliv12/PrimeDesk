@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PrimeDesk | Assinatura</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="stylesheet" href="css/assinatura.css" />
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="container-fluid">
+      <a class="logo" href="dashboard.html">PrimeDesk</a>
+      <button class="btn-sair" id="btnSair" type="button">
+        <i class="bi bi-box-arrow-right"></i> Sair
+      </button>
+    </div>
+  </nav>
+
+  <main class="d-flex align-items-center justify-content-center px-3" style="min-height: calc(100vh - 72px);">
+    <div class="assinatura-card">
+
+      <div id="alerta" class="alerta d-none" aria-live="polite"></div>
+
+      <div class="status-badge" id="statusBadge">
+        <i class="bi bi-hourglass-split"></i>
+        <span id="statusTexto">Carregando...</span>
+      </div>
+
+      <h1 class="titulo">Plano PrimeDesk</h1>
+      <p class="subtitulo">Acesso completo a todas as funcionalidades</p>
+
+      <div class="preco-box">
+        <span class="preco-valor" id="precoValor">R$ —</span>
+        <span class="preco-periodo">/ mês</span>
+      </div>
+
+      <ul class="features">
+        <li><i class="bi bi-check-circle-fill"></i> Profissionais ilimitados</li>
+        <li><i class="bi bi-check-circle-fill"></i> Agendamentos ilimitados</li>
+        <li><i class="bi bi-check-circle-fill"></i> Link público da agenda</li>
+        <li><i class="bi bi-check-circle-fill"></i> Notificações em tempo real</li>
+      </ul>
+
+      <button class="btn-assinar" id="btnAssinar" type="button">
+        <i class="bi bi-credit-card"></i> Assinar agora
+      </button>
+
+      <a href="dashboard.html" class="link-voltar" id="linkVoltar">Voltar ao dashboard</a>
+
+      <p class="aviso-academico">
+        <i class="bi bi-info-circle"></i> Projeto acadêmico — pagamento simulado, sem cobrança real.
+      </p>
+    </div>
+  </main>
+
+  <script src="js/assinatura.js"></script>
+
+</body>
+</html>
